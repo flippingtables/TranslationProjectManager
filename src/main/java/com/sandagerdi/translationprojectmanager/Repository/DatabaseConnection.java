@@ -1,5 +1,5 @@
 package com.sandagerdi.translationprojectmanager.Repository;
-import Models.Client;
+
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -9,28 +9,32 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 /**
  *
  * @author Jóannes
  */
 public class DatabaseConnection {
 
-    private static ConnectionSource connectionSource = null;
+    public static ConnectionSource connectionSource = null;
     private final static String DATABASE_URL = "jdbc:sqlite:translationJobs.db";
-    public Dao<Clients, Integer> accountDao;
+    private Dao<Clients, Integer> clientDao;
+    private Dao<JobTypes, Integer> jobTypesDao;
 
     public DatabaseConnection() {
         try {
             // create our data-source for the database
-            connectionSource = new JdbcConnectionSource(DATABASE_URL);
+            if (connectionSource == null) {
+                connectionSource = new JdbcConnectionSource(DATABASE_URL);
+            }
             // setup our database and DAOs
             setupDatabase(connectionSource);
 
             System.out.println("\n\nIt seems to have worked\n\n");
         } catch (SQLException ex) {
+
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
+            System.out.println("BUGGUR0");
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             // destroy the data source which should close underlying connections
@@ -38,6 +42,7 @@ public class DatabaseConnection {
                 try {
                     connectionSource.close();
                 } catch (SQLException ex) {
+                    System.out.println("BUGGUR");
                     Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -45,9 +50,28 @@ public class DatabaseConnection {
     }
 
     public void setupDatabase(ConnectionSource connectionSource) throws Exception {
-        accountDao = DaoManager.createDao(connectionSource, Clients.class);
-        
+        clientDao = DaoManager.createDao(connectionSource, Clients.class);
+        jobTypesDao = DaoManager.createDao(connectionSource, JobTypes.class);
         // if you need to create the table
         TableUtils.createTableIfNotExists(connectionSource, Clients.class);
+        TableUtils.createTableIfNotExists(connectionSource, JobTypes.class);
+    }
+
+    public Dao<Clients, Integer> getClientsDao() {
+        try {
+            clientDao = DaoManager.createDao(connectionSource, Clients.class);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return clientDao;
+    }
+
+    public Dao<JobTypes, Integer> getJybTypesDao() {
+        try {
+            jobTypesDao = DaoManager.createDao(connectionSource, JobTypes.class);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return jobTypesDao;
     }
 }

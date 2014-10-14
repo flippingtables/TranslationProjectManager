@@ -7,7 +7,6 @@ import com.j256.ormlite.table.DatabaseTable;
  *
  * @author Jóannes
  */
-
 @DatabaseTable(tableName = "clients")
 public class Clients {
 
@@ -77,6 +76,19 @@ public class Clients {
 
     public void setClientContactName(String clientContactName) {
         this.clientContactName = clientContactName;
+    }
+
+    @Override
+    public int hashCode() {
+        return clientName.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null || other.getClass() != getClass()) {
+            return false;
+        }
+        return clientName.equals(((Clients) other).clientName);
     }
 
 }

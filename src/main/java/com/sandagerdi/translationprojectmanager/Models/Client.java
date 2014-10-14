@@ -1,4 +1,4 @@
-package Models;
+package com.sandagerdi.translationprojectmanager.Models;
 
 /**
  *

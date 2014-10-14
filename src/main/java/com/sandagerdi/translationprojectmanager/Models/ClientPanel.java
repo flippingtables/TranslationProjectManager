@@ -1,4 +1,7 @@
-package Models;
+/*
+ *  Copyright Jóannes í Sandagerði 2014
+ */
+package com.sandagerdi.translationprojectmanager.Models;
 
 import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
@@ -10,14 +13,13 @@ import java.util.logging.Logger;
  *
  * @author Jóannes
  */
-public class ClientFrame extends javax.swing.JFrame {
-    DatabaseConnection db;
-    /**
-     * Creates new form ClientFrame
-     */
-    public ClientFrame() {
-        db = new DatabaseConnection();
+public class ClientPanel extends javax.swing.JPanel {
 
+    /**
+     * Creates new form ClientPanel
+     */
+    public ClientPanel() {
+        //db = new DatabaseConnection();
         initComponents();
     }
 
@@ -39,8 +41,6 @@ public class ClientFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         clientContactNameTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         addClientButton.setText("Add Client");
         addClientButton.setToolTipText("");
@@ -65,8 +65,8 @@ public class ClientFrame extends javax.swing.JFrame {
 
         jLabel4.setText("Client Contact Name:");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -74,22 +74,22 @@ public class ClientFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(addClientButton)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(clientContactPhoneTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(clientConectEmailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(clientNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(clientNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(clientConectEmailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(clientContactPhoneTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(clientContactNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
-                .addComponent(clientContactNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,14 +110,13 @@ public class ClientFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(clientContactNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(addClientButton)
-                .addGap(77, 77, 77))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {clientConectEmailTextField, clientContactPhoneTextField, clientNameTextField, jLabel1, jLabel2, jLabel3});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {clientConectEmailTextField, clientContactNameTextField, clientContactPhoneTextField, clientNameTextField, jLabel1, jLabel2, jLabel3, jLabel4});
 
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void addClientButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addClientButtonActionPerformed
@@ -125,56 +124,22 @@ public class ClientFrame extends javax.swing.JFrame {
         String clientEmail = this.clientConectEmailTextField.getText();
         String clientContactName = this.clientNameTextField.getText();
         String clientContactPhone = this.clientContactPhoneTextField.getText();
-       
+        DatabaseConnection db = new DatabaseConnection();       
         //public Clients(String clientName, String clientEmail, String clientPhone, String clientContactName) {
 
         Clients client = new Clients(clientName, clientEmail, clientContactPhone, clientContactName);
         try {
-            db.accountDao.create(client);
+            
+            db.getClientsDao().create(client);
         } catch (SQLException ex) {
-            Logger.getLogger(ClientFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }//GEN-LAST:event_addClientButtonActionPerformed
 
     private void clientNameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientNameTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_clientNameTextFieldActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ClientFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ClientFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ClientFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ClientFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ClientFrame().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addClientButton;
