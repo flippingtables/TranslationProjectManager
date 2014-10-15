@@ -15,7 +15,6 @@ Desktop.ini
 *.jar
 *.war
 *.ear
-*.db
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
@@ -31,3 +30,4 @@ nbactions.xml
 nb-configuration.xml
 target/
 *.db
+*.xml~

@@ -13,20 +13,20 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "jobTypes")
 public class JobTypes {
 
-    public static final String ACCOUNT_ID_FIELD_NAME = "account_id";
-    public static final String ACCOUNT_SERVICE_FIELD_NAME = "service";
-    public static final String ACCOUNT_SOURCE_LANG_FIELD_NAME = "source_lang";
-    public static final String ACCOUNT_TARGET_LANG_FIELD_NAME = "target_lang";
+    public static final String CLIENTS_ID_FIELD_NAME = "clients_id";
+    public static final String JOBTYPES_SERVICE_FIELD_NAME = "service";
+    public static final String JOBTYPES_SOURCE_LANG_FIELD_NAME = "source_lang";
+    public static final String JOBTYPES_TARGET_LANG_FIELD_NAME = "target_lang";
 
     @DatabaseField(generatedId = true)
-    private int id;
-    @DatabaseField(foreign = true, columnName = ACCOUNT_ID_FIELD_NAME)
+    private int id;    
+    @DatabaseField(foreign = true, columnName = CLIENTS_ID_FIELD_NAME)
     private Clients client;
-    @DatabaseField(columnName = ACCOUNT_SERVICE_FIELD_NAME, canBeNull = false)
+    @DatabaseField(columnName = JOBTYPES_SERVICE_FIELD_NAME, canBeNull = false)
     private String service;
-    @DatabaseField(columnName = ACCOUNT_SOURCE_LANG_FIELD_NAME)
+    @DatabaseField(columnName = JOBTYPES_SOURCE_LANG_FIELD_NAME)
     private String source_lang;
-    @DatabaseField(columnName = ACCOUNT_TARGET_LANG_FIELD_NAME)
+    @DatabaseField(columnName = JOBTYPES_TARGET_LANG_FIELD_NAME)
     private String target_lang;
     @DatabaseField
     private double pay_hour;
@@ -71,6 +71,11 @@ public class JobTypes {
         this.words_rep = words_rep;
         this.words_ice = words_ice;
     }
+    
+    public int getId() {
+        return id;
+    }
+    
     /**
      * @return the client
      */
@@ -279,6 +284,21 @@ public class JobTypes {
      */
     public void setWords_ice(double words_ice) {
         this.words_ice = words_ice;
+    }
+    
+    @Override
+    public int hashCode() {
+        return service.hashCode();
+    }
+
+    
+    //TODO pimp this
+    @Override
+    public boolean equals(Object other) {
+        if (other == null || other.getClass() != getClass()) {
+            return false;
+        }
+        return service.equals(((JobTypes) other).service);
     }
     
 }

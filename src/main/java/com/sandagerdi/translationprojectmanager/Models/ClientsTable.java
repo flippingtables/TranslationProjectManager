@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
 public class ClientsTable extends javax.swing.JPanel {
 
     private DefaultTableModel tableModel = new DefaultTableModel();
-    private TableModel m_tableModel;
+    private ClientTableModel m_tableModel;
             
     /**
      * Creates new form ClientsTable
@@ -107,7 +107,7 @@ public class ClientsTable extends javax.swing.JPanel {
                 Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        m_tableModel = new TableModel(clients);
+        m_tableModel = new ClientTableModel(clients);
         clientTable = new JTable(m_tableModel);
         System.out.println(clientTable.getColumnName(1));
         System.out.println(clientTable.getRowCount());

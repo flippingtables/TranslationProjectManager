@@ -15,12 +15,13 @@ import java.util.logging.Logger;
  */
 public class DatabaseConnection {
 
-    public static ConnectionSource connectionSource = null;
-    private final static String DATABASE_URL = "jdbc:sqlite:translationJobs.db";
+    public ConnectionSource connectionSource;// = null;
+    private final static String DATABASE_URL = "jdbc:sqlite:C:\\apps\\GitHub\\TranslationProjectManager\\translationJobs.db";
     private Dao<Clients, Integer> clientDao;
     private Dao<JobTypes, Integer> jobTypesDao;
 
     public DatabaseConnection() {
+
         try {
             // create our data-source for the database
             if (connectionSource == null) {
@@ -49,7 +50,7 @@ public class DatabaseConnection {
         }
     }
 
-    public void setupDatabase(ConnectionSource connectionSource) throws Exception {
+    public void setupDatabase(ConnectionSource connectionSource) throws SQLException {
         clientDao = DaoManager.createDao(connectionSource, Clients.class);
         jobTypesDao = DaoManager.createDao(connectionSource, JobTypes.class);
         // if you need to create the table
@@ -59,19 +60,45 @@ public class DatabaseConnection {
 
     public Dao<Clients, Integer> getClientsDao() {
         try {
-            clientDao = DaoManager.createDao(connectionSource, Clients.class);
-        } catch (SQLException ex) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            if (connectionSource == null) {
+                connectionSource = new JdbcConnectionSource(DATABASE_URL);
+            }
+
+            try {
+                clientDao = DaoManager.createDao(connectionSource, Clients.class);
+            } catch (SQLException ex) {
+                Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (SQLException e) {
+            System.out.println("FUCKYUOGetClients");
+        } finally {
+            try {
+                connectionSource.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return clientDao;
     }
 
-    public Dao<JobTypes, Integer> getJybTypesDao() {
+    public Dao<JobTypes, Integer> getJobTypesDao() {
+
         try {
             jobTypesDao = DaoManager.createDao(connectionSource, JobTypes.class);
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return jobTypesDao;
+    }
+    
+    public void Connect(){
+        try {
+            if (connectionSource == null) {
+            connectionSource = new JdbcConnectionSource(DATABASE_URL);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

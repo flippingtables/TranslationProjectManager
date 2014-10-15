@@ -90,5 +90,10 @@ public class Clients {
         }
         return clientName.equals(((Clients) other).clientName);
     }
+    
+    @Override
+    public String toString(){
+        return this.clientName;
+    }
 
 }

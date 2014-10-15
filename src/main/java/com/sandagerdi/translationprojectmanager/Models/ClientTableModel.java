@@ -16,14 +16,14 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Jóannes
  */
-public class TableModel extends AbstractTableModel {
+public class ClientTableModel extends AbstractTableModel {
     public String[] m_colNames = { "Client Name", "Client Contact", "Client Email","Client Phone"};
 
     public Class[] m_colTypes = { String.class, String.class, String.class, String.class};
 
     Vector m_macDataVector;
 
-    public TableModel(Vector macDataVector) {
+    public ClientTableModel(Vector macDataVector) {
       super();
       m_macDataVector = macDataVector;
     }
@@ -57,8 +57,9 @@ public class TableModel extends AbstractTableModel {
         try {
             db.getClientsDao().createOrUpdate(macData);
             fireTableCellUpdated(row, col);
+//            fireTableDataChanged();
         } catch (SQLException ex) {
-            Logger.getLogger(TableModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientTableModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
