@@ -9,36 +9,15 @@ package com.sandagerdi.translationprojectmanager.Util;
  */
 public class Utils {
 
-//    public void FillTable(JTable table, String Query)
-//{
-//    try
-//    {
-//        CreateConnection();
-//        Statement stat = conn.createStatement();
-//        ResultSet rs = stat.executeQuery(Query);
-//
-//        //To remove previously added rows
-//        while(table.getRowCount() > 0) 
-//        {
-//            ((DefaultTableModel) table.getModel()).removeRow(0);
-//        }
-//        int columns = rs.getMetaData().getColumnCount();
-//        while(rs.next())
-//        {  
-//            Object[] row = new Object[columns];
-//            for (int i = 1; i <= columns; i++)
-//            {  
-//                row[i - 1] = rs.getObject(i);
-//            }
-//            ((DefaultTableModel) table.getModel()).insertRow(rs.getRow()-1,row);
-//        }
-//
-//        rs.close();
-//        stat.close();
-//        conn.close();
-//    }
-//    catch(InstantiationException | IllegalAccessException | SQLException e)
-//    {
-//    }
-//}
+    //Used for checking if a string is parseable to a double
+    public static boolean parseableDouble(String input) {
+        boolean result = false;
+        try {
+            Double.parseDouble(input);
+            result=true;
+        } catch (NumberFormatException e) {
+            result=false;
+        }
+        return result;
+    }
 }

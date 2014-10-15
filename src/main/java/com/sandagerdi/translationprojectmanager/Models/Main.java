@@ -26,31 +26,43 @@ public class Main extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        clientPanel1 = new com.sandagerdi.translationprojectmanager.Models.ClientPanel();
         viewClientsTable1 = new com.sandagerdi.translationprojectmanager.Models.ViewClientsTable();
-        viewJobTypesTable1 = new com.sandagerdi.translationprojectmanager.Models.ViewJobTypesTable();
         jobTypesPanel1 = new com.sandagerdi.translationprojectmanager.Models.JobTypesPanel();
+        viewJobTypesTable1 = new com.sandagerdi.translationprojectmanager.Models.ViewJobTypesTable();
+        clientPanel2 = new com.sandagerdi.translationprojectmanager.Models.ClientPanel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTabbedPane1.addTab("tab3", clientPanel1);
         jTabbedPane1.addTab("tab1", viewClientsTable1);
-        jTabbedPane1.addTab("tab2", viewJobTypesTable1);
         jTabbedPane1.addTab("tab4", jobTypesPanel1);
+        jTabbedPane1.addTab("tab2", viewJobTypesTable1);
+        jTabbedPane1.addTab("tab4", clientPanel2);
+
+        jMenu1.setText("File");
+
+        jMenuItem1.setText("jMenuItem1");
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 751, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 29, Short.MAX_VALUE))
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
         );
 
         pack();
@@ -93,7 +105,11 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.sandagerdi.translationprojectmanager.Models.ClientPanel clientPanel1;
+    private com.sandagerdi.translationprojectmanager.Models.ClientPanel clientPanel2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private com.sandagerdi.translationprojectmanager.Models.JobTypesPanel jobTypesPanel1;
     private com.sandagerdi.translationprojectmanager.Models.ViewClientsTable viewClientsTable1;

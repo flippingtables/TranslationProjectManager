@@ -4,11 +4,9 @@
 package com.sandagerdi.translationprojectmanager.Models;
 
 import com.j256.ormlite.dao.CloseableIterator;
-import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,7 +15,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *

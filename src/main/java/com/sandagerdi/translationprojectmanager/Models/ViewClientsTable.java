@@ -6,10 +6,12 @@ package com.sandagerdi.translationprojectmanager.Models;
 import com.j256.ormlite.dao.CloseableIterator;
 import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
+import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.Event;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -22,13 +24,13 @@ import javax.swing.event.TableModelListener;
  */
 public class ViewClientsTable extends javax.swing.JPanel {
 
-    private JTable clientTable;
-    private ClientTableModel m_tableModel;
+    public JTable clientTable;
+    public ClientTableModel m_tableModel;
 
     private javax.swing.JScrollPane jScrollPane1;
     private JButton jButton1;
     private DatabaseConnection db;// = new DatabaseConnection();
-
+    private JButton deleteRow;
     public ViewClientsTable() {
 
         initComponents();
@@ -41,12 +43,22 @@ public class ViewClientsTable extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton1.setText("Refresh Client Table");
 
+        
+        
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
+        deleteRow = new javax.swing.JButton();
+        deleteRow.setText("Delete Selected Row!");
+        deleteRow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteRowActionPerformed(evt);
+            }
+        });
+        
         db = new DatabaseConnection();
         CloseableIterator<Clients> c = null;
         c = db.getClientsDao().closeableIterator();
@@ -63,12 +75,11 @@ public class ViewClientsTable extends javax.swing.JPanel {
         clientTable.getModel().addTableModelListener(new TableModelListener() {
 
             public void tableChanged(TableModelEvent e) {
-                System.out.println("SOMETHING: " + e);
+                System.out.println("Table Data Changed, updating tables");
                 updateTable();
             }
         });
-        System.out.println(clientTable.getColumnName(1));
-        System.out.println(clientTable.getRowCount());
+        
         jScrollPane1 = new JScrollPane();
         jScrollPane1.setViewportView(clientTable);
 
@@ -79,6 +90,7 @@ public class ViewClientsTable extends javax.swing.JPanel {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
                 .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(deleteRow)
                         .addComponent(jButton1))
         );
         layout.setVerticalGroup(
@@ -87,7 +99,8 @@ public class ViewClientsTable extends javax.swing.JPanel {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
-                        .addGap(0, 56, Short.MAX_VALUE))
+                        .addGap(0, 56, Short.MAX_VALUE)
+                        .addComponent(deleteRow))
         );
         clientTable.setEditingColumn(2);
         clientTable.setEnabled(true);
@@ -114,4 +127,12 @@ public class ViewClientsTable extends javax.swing.JPanel {
         m_tableModel.m_macDataVector = clients;
         clientTable.setModel(m_tableModel);
     }
+    
+    private void deleteRowActionPerformed(ActionEvent evt) {
+        int rowToDelete = clientTable.getSelectedRow();
+        System.out.println("Selected Row:" + rowToDelete);
+        m_tableModel.removeRow(rowToDelete);
+//        updateTable();
+           }
+       
 }

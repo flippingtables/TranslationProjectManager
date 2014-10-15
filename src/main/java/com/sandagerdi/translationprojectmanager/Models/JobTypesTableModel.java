@@ -4,6 +4,7 @@
 package com.sandagerdi.translationprojectmanager.Models;
 
 import com.j256.ormlite.dao.CloseableIterator;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
@@ -19,13 +20,17 @@ import javax.swing.table.AbstractTableModel;
  */
 public class JobTypesTableModel extends AbstractTableModel {
 
-    public String[] m_colNames = {"Client", "Service", "Source", "Target",
-        "Hour", "New", "Fuzzy 50",
-        "Fuzzy 75", "Fuzzy 85", "Fuzzy 95", "Match",
-        "Rep", "ICE", "Min", "Rush %"};
-    public Class[] m_colTypes = {String.class, String.class, String.class, String.class};
-    Vector m_macDataVector;
+    DatabaseConnection db = null;
 
+    public String[] m_colNames = {"Client", "Service", "Source", "Target",
+        "Hour", "New", "Fuzzy 50", "Fuzzy 75",
+        "Fuzzy 85", "Fuzzy 95", "Match", "Rep",
+        "ICE", "Min", "Rush %"};
+    public Class[] m_colTypes = {Clients.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class,
+        String.class, String.class, String.class, String.class,
+        String.class, String.class, String.class};
+    Vector m_macDataVector;
+    
     public JobTypesTableModel(Vector macDataVector) {
         super();
         m_macDataVector = macDataVector;
@@ -40,7 +45,10 @@ public class JobTypesTableModel extends AbstractTableModel {
     }
 
     public void setValueAt(Object value, int row, int col) {
-        DatabaseConnection db = new DatabaseConnection();
+        if (db==null){
+            db = new DatabaseConnection();
+        }
+//        DatabaseConnection db = new DatabaseConnection();
         CloseableIterator<JobTypes> c = null;
         c = db.getJobTypesDao().closeableIterator();
 
@@ -114,7 +122,21 @@ public class JobTypesTableModel extends AbstractTableModel {
 
         switch (col) {
             case 0:
-                return macData.getClient();
+                if (db == null) {
+                    db = new DatabaseConnection();
+                }
+//               
+////                
+//                Clients client = null;
+//                try {
+//                    //        c = db.getJobTypesDao();
+//                    client = db.getClientsDao().queryForId(macData.getClient().getId());
+//                } catch (SQLException ex) {
+//                    Logger.getLogger(JobTypesTableModel.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                System.out.println("ROW: " + client.getClientName());
+//                return client.getClientName();
+                return ((Clients)macData.getClient()).toString();
             case 1:
                 return macData.getService();
             case 2:
