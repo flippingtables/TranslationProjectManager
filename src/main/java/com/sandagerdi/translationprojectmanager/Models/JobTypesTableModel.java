@@ -30,7 +30,7 @@ public class JobTypesTableModel extends AbstractTableModel {
         String.class, String.class, String.class, String.class,
         String.class, String.class, String.class};
     Vector m_macDataVector;
-    
+
     public JobTypesTableModel(Vector macDataVector) {
         super();
         m_macDataVector = macDataVector;
@@ -45,7 +45,7 @@ public class JobTypesTableModel extends AbstractTableModel {
     }
 
     public void setValueAt(Object value, int row, int col) {
-        if (db==null){
+        if (db == null) {
             db = new DatabaseConnection();
         }
 //        DatabaseConnection db = new DatabaseConnection();
@@ -122,21 +122,7 @@ public class JobTypesTableModel extends AbstractTableModel {
 
         switch (col) {
             case 0:
-                if (db == null) {
-                    db = new DatabaseConnection();
-                }
-//               
-////                
-//                Clients client = null;
-//                try {
-//                    //        c = db.getJobTypesDao();
-//                    client = db.getClientsDao().queryForId(macData.getClient().getId());
-//                } catch (SQLException ex) {
-//                    Logger.getLogger(JobTypesTableModel.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//                System.out.println("ROW: " + client.getClientName());
-//                return client.getClientName();
-                return ((Clients)macData.getClient()).toString();
+                return ((Clients) macData.getClient()).toString();
             case 1:
                 return macData.getService();
             case 2:

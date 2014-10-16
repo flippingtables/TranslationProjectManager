@@ -23,7 +23,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jTabbedPane1" alignment="0" pref="453" max="32767" attributes="0"/>
+          <Component id="jTabbedPane1" alignment="1" pref="453" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -40,17 +40,8 @@
         <Component class="com.sandagerdi.translationprojectmanager.Models.ClientPanel" name="clientPanel1">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Add Client">
-                <Property name="tabTitle" type="java.lang.String" value="Add Client"/>
-              </JTabbedPaneConstraints>
-            </Constraint>
-          </Constraints>
-        </Component>
-        <Component class="com.sandagerdi.translationprojectmanager.Models.ViewClientsTable" name="viewClientsTable2">
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="See Clients">
-                <Property name="tabTitle" type="java.lang.String" value="See Clients"/>
+              <JTabbedPaneConstraints tabName="tab1">
+                <Property name="tabTitle" type="java.lang.String" value="tab1"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>

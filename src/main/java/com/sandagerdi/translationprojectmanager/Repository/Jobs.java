@@ -10,8 +10,8 @@ import com.j256.ormlite.table.DatabaseTable;
  *
  * @author Jóannes
  */
-@DatabaseTable(tableName = "jobTypes")
-public class JobTypes {
+@DatabaseTable(tableName = "jobs")
+public class Jobs {
 
     public static final String CLIENTS_ID_FIELD_NAME = "clients_id";
     public static final String JOBTYPES_SERVICE_FIELD_NAME = "service";
@@ -51,10 +51,10 @@ public class JobTypes {
     @DatabaseField
     private double words_ice;
 
-    JobTypes() {
+    Jobs() {
     }
 
-    public JobTypes(Clients client, String service, String source_lang, String target_lang, double pay_hour, double pay_minimum, double pay_rush, double words_new, double words_fuzzy50, double words_fuzzy75, double words_fuzzy85, double words_fuzzy95, double words_match, double words_rep, double words_ice) {
+    public Jobs(Clients client, String service, String source_lang, String target_lang, double pay_hour, double pay_minimum, double pay_rush, double words_new, double words_fuzzy50, double words_fuzzy75, double words_fuzzy85, double words_fuzzy95, double words_match, double words_rep, double words_ice) {
         this.client = client;
         this.service = service;
         this.source_lang = source_lang;
@@ -298,7 +298,6 @@ public class JobTypes {
         if (other == null || other.getClass() != getClass()) {
             return false;
         }
-        return service.equals(((JobTypes) other).service);
+        return service.equals(((Jobs) other).service);
     }
-    
 }

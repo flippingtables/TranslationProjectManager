@@ -53,6 +53,10 @@ public class JobTypesPanel extends javax.swing.JPanel {
             } catch (SQLException ex) {
                 Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }try {
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(JobTypesPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new Vector<>(clients)));
     }

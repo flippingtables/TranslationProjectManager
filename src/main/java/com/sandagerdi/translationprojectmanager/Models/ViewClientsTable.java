@@ -27,38 +27,38 @@ public class ViewClientsTable extends javax.swing.JPanel {
     public JTable clientTable;
     public ClientTableModel m_tableModel;
 
+    public ClientTableModel getM_tableModel() {
+        return m_tableModel;
+    }
+
     private javax.swing.JScrollPane jScrollPane1;
     private JButton jButton1;
     private DatabaseConnection db;// = new DatabaseConnection();
     private JButton deleteRow;
-    public ViewClientsTable() {
 
+    public ViewClientsTable() {
         initComponents();
     }
 
     @SuppressWarnings("unchecked")
     private void initComponents() {
-        //jScrollPane1 = new javax.swing.JScrollPane();
-        //CloseableIterator<Clients> murtur = getClients();
         jButton1 = new javax.swing.JButton();
         jButton1.setText("Refresh Client Table");
+        deleteRow = new javax.swing.JButton();
+        deleteRow.setText("Delete Selected Row!");
 
-        
-        
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        deleteRow = new javax.swing.JButton();
-        deleteRow.setText("Delete Selected Row!");
         deleteRow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteRowActionPerformed(evt);
             }
         });
-        
+
         db = new DatabaseConnection();
         CloseableIterator<Clients> c = null;
         c = db.getClientsDao().closeableIterator();
@@ -70,6 +70,11 @@ public class ViewClientsTable extends javax.swing.JPanel {
                 Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        try {
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewClientsTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
         m_tableModel = new ClientTableModel(clients);
         clientTable = new JTable(m_tableModel);
         clientTable.getModel().addTableModelListener(new TableModelListener() {
@@ -79,7 +84,7 @@ public class ViewClientsTable extends javax.swing.JPanel {
                 updateTable();
             }
         });
-        
+
         jScrollPane1 = new JScrollPane();
         jScrollPane1.setViewportView(clientTable);
 
@@ -87,24 +92,24 @@ public class ViewClientsTable extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(deleteRow)
-                        .addComponent(jButton1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
-                        .addGap(0, 56, Short.MAX_VALUE)
-                        .addComponent(deleteRow))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButton1)
+                                .addComponent(deleteRow))
+                        .addContainerGap(34, Short.MAX_VALUE))
         );
-        clientTable.setEditingColumn(2);
-        clientTable.setEnabled(true);
-
     }
 
     //Onclick method for the Button
@@ -114,8 +119,7 @@ public class ViewClientsTable extends javax.swing.JPanel {
     }
 
     private void updateTable() {
-        CloseableIterator<Clients> c = null;
-        c = db.getClientsDao().closeableIterator();
+        CloseableIterator<Clients> c = db.getClientsDao().closeableIterator();
         Vector<Object> clients = new Vector<Object>();
         while (c.hasNext()) {
             try {
@@ -124,15 +128,20 @@ public class ViewClientsTable extends javax.swing.JPanel {
                 Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        try {
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewClientsTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
         m_tableModel.m_macDataVector = clients;
         clientTable.setModel(m_tableModel);
     }
-    
+
     private void deleteRowActionPerformed(ActionEvent evt) {
         int rowToDelete = clientTable.getSelectedRow();
         System.out.println("Selected Row:" + rowToDelete);
         m_tableModel.removeRow(rowToDelete);
 //        updateTable();
-           }
-       
+    }
+
 }

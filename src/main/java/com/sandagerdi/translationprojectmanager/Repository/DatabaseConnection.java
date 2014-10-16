@@ -86,6 +86,7 @@ public class DatabaseConnection {
         try {
             jobTypesDao = DaoManager.createDao(connectionSource, JobTypes.class);
         } catch (SQLException ex) {
+            System.out.println("SOmething happened");
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
 

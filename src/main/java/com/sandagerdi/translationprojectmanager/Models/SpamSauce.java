@@ -3,23 +3,17 @@
  */
 package com.sandagerdi.translationprojectmanager.Models;
 
-import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
-
 /**
  *
  * @author Jóannes
  */
-public class Main extends javax.swing.JFrame {
-    DatabaseConnection db = new DatabaseConnection();
+public class SpamSauce extends javax.swing.JFrame {
+
     /**
-     * Creates new form FUCKYOU
+     * Creates new form SpamSauce
      */
-    public Main() {
-        db.setupDatabase();
+    public SpamSauce() {
         initComponents();
-        //Initialize the database
-        
-        
     }
 
     /**
@@ -32,45 +26,29 @@ public class Main extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        viewClientsTable1 = new com.sandagerdi.translationprojectmanager.Models.ViewClientsTable();
-        jobTypesPanel1 = new com.sandagerdi.translationprojectmanager.Models.JobTypesPanel();
         viewJobTypesTable1 = new com.sandagerdi.translationprojectmanager.Models.ViewJobTypesTable();
-        clientPanel2 = new com.sandagerdi.translationprojectmanager.Models.ClientPanel();
-        addNewJobPanel1 = new com.sandagerdi.translationprojectmanager.Models.AddNewJobPanel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        viewClientsTable1 = new com.sandagerdi.translationprojectmanager.Models.ViewClientsTable();
+        clientPanel1 = new com.sandagerdi.translationprojectmanager.Models.ClientPanel();
+        clientsTable1 = new com.sandagerdi.translationprojectmanager.Models.ClientsTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTabbedPane1.addTab("See Clients", viewClientsTable1);
-        jTabbedPane1.addTab("Add Job Types", jobTypesPanel1);
-        jTabbedPane1.addTab("See Job Types", viewJobTypesTable1);
-        jTabbedPane1.addTab("Add Clients", clientPanel2);
-        jTabbedPane1.addTab("Jobs", addNewJobPanel1);
-
-        jMenu1.setText("File");
-
-        jMenuItem1.setText("jMenuItem1");
-        jMenu1.add(jMenuItem1);
-
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
+        jTabbedPane1.addTab("tab1", viewJobTypesTable1);
+        jTabbedPane1.addTab("tab2", viewClientsTable1);
+        jTabbedPane1.addTab("tab4", clientPanel1);
+        jTabbedPane1.addTab("tab4", clientsTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 68, Short.MAX_VALUE))
         );
 
         pack();
@@ -87,40 +65,34 @@ public class Main extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SpamSauce.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SpamSauce.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SpamSauce.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SpamSauce.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main().setVisible(true);
+                new SpamSauce().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.sandagerdi.translationprojectmanager.Models.AddNewJobPanel addNewJobPanel1;
-    private com.sandagerdi.translationprojectmanager.Models.ClientPanel clientPanel2;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
+    private com.sandagerdi.translationprojectmanager.Models.ClientPanel clientPanel1;
+    private com.sandagerdi.translationprojectmanager.Models.ClientsTable clientsTable1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private com.sandagerdi.translationprojectmanager.Models.JobTypesPanel jobTypesPanel1;
     private com.sandagerdi.translationprojectmanager.Models.ViewClientsTable viewClientsTable1;
     private com.sandagerdi.translationprojectmanager.Models.ViewJobTypesTable viewJobTypesTable1;
     // End of variables declaration//GEN-END:variables

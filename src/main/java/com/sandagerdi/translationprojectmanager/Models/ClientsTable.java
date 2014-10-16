@@ -12,6 +12,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -20,21 +22,38 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ClientsTable extends javax.swing.JPanel {
 
-    private DefaultTableModel tableModel = new DefaultTableModel();
+//    private DefaultTableModel tableModel = new DefaultTableModel();
     private ClientTableModel m_tableModel;
-            
+    private DatabaseConnection db = new DatabaseConnection();
+
     /**
      * Creates new form ClientsTable
      */
     public ClientsTable() {
+
+
+        db.Connect();
+        CloseableIterator<Clients> c = db.getClientsDao().closeableIterator();
+        Vector<Object> clients = new Vector<Object>();
+        while (c.hasNext()) {
+            try {
+                clients.add(c.current());
+            } catch (SQLException ex) {
+                Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        db.Disconnet();
+        m_tableModel = new ClientTableModel(clients);
+//        clientTable = new JTable(m_tableModel);
         initComponents();
         
-        try {
-            FillTable(clientTable);
-        } catch (SQLException ex) {
-            Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        clientTable = new JTable(tableModel);
+        clientTable.getModel().addTableModelListener(new TableModelListener() {
+
+            public void tableChanged(TableModelEvent e) {
+                System.out.println("Table Data Changed, updating tables");
+                updateTable();
+            }
+        });
     }
 
     /**
@@ -46,112 +65,73 @@ public class ClientsTable extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        btnUpdateTable = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        clientTable = new javax.swing.JTable();
+        clientTable = new JTable(m_tableModel);
+        deleteRow = new javax.swing.JButton();
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnUpdateTable.setText("jButton1");
+        btnUpdateTable.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnUpdateTableActionPerformed(evt);
             }
         });
 
-        clientTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         jScrollPane1.setViewportView(clientTable);
+
+        deleteRow.setText("jButton2");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 25, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(deleteRow)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnUpdateTable)
+                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUpdateTable)
+                    .addComponent(deleteRow))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        try {
-            FillTable(clientTable);
-        } catch (SQLException ex) {
-            Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        DatabaseConnection db = new DatabaseConnection();
+    private void btnUpdateTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateTableActionPerformed
+        m_tableModel.fireTableDataChanged();
+    }//GEN-LAST:event_btnUpdateTableActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnUpdateTable;
+    private javax.swing.JTable clientTable;
+    private javax.swing.JButton deleteRow;
+    private javax.swing.JScrollPane jScrollPane1;
+    // End of variables declaration//GEN-END:variables
+
+    private void updateTable() {
+        db.Connect();
         CloseableIterator<Clients> c = null;
         c = db.getClientsDao().closeableIterator();
         Vector<Object> clients = new Vector<Object>();
-        while (c.hasNext()){
+        while (c.hasNext()) {
             try {
                 clients.add(c.current());
             } catch (SQLException ex) {
                 Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        m_tableModel = new ClientTableModel(clients);
-        clientTable = new JTable(m_tableModel);
-        System.out.println(clientTable.getColumnName(1));
-        System.out.println(clientTable.getRowCount());
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable clientTable;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JScrollPane jScrollPane1;
-    // End of variables declaration//GEN-END:variables
-
-    public void FillTable(JTable table) throws SQLException {
-
-        DatabaseConnection db = new DatabaseConnection();
-        CloseableIterator<Clients> c = null;
-        c = db.getClientsDao().closeableIterator();
-
-        int columns = c.getRawResults().getColumnCount();
-        String[] columNamess = c.getRawResults().getColumnNames();
-
-        Vector<String> columnNames = new Vector<String>();
-
-        for (int i = 1; i < columns; i++) {
-            System.out.println(columNamess[i]);
-            columnNames.add(columNamess[i]);
-        }
-
-        // Data of the table
-        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-        while (c.hasNext()) {
-            Vector<Object> vector = new Vector<Object>();
-            for (int i = 1; i <= columns; i++) {
-                vector.add(c.current().getClientName());
-                vector.add(c.current().getClientContactName());
-                vector.add(c.current().getClientEmail());
-                vector.add(c.current().getClientPhone());
-            }
-            data.add(vector);
-        }
-        System.out.println(data);
-        System.out.println(columnNames);
-        tableModel.setDataVector(data, columnNames);
-
+        db.Disconnet();
+        m_tableModel.m_macDataVector = clients;
+        clientTable.setModel(m_tableModel);
     }
 
 }

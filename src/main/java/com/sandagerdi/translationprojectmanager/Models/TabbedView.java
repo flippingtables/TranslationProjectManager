@@ -33,18 +33,16 @@ public class TabbedView extends javax.swing.JFrame {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         clientPanel1 = new com.sandagerdi.translationprojectmanager.Models.ClientPanel();
-        viewClientsTable2 = new com.sandagerdi.translationprojectmanager.Models.ViewClientsTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTabbedPane1.addTab("Add Client", clientPanel1);
-        jTabbedPane1.addTab("See Clients", viewClientsTable2);
+        jTabbedPane1.addTab("tab1", clientPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,6 +93,5 @@ public class TabbedView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.sandagerdi.translationprojectmanager.Models.ClientPanel clientPanel1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private com.sandagerdi.translationprojectmanager.Models.ViewClientsTable viewClientsTable2;
     // End of variables declaration//GEN-END:variables
 }

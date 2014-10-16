@@ -1,0 +1,11 @@
+BEGIN TRANSACTION;
+CREATE TABLE `jobTypes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT , `clients_id` INTEGER , `service` VARCHAR NOT NULL , `source_lang` VARCHAR , `target_lang` VARCHAR , `pay_hour` DOUBLE PRECISION , `pay_minimum` DOUBLE PRECISION , `pay_rush` DOUBLE PRECISION , `words_new` DOUBLE PRECISION , `words_fuzzy50` DOUBLE PRECISION , `words_fuzzy75` DOUBLE PRECISION , `words_fuzzy85` DOUBLE PRECISION , `words_fuzzy95` DOUBLE PRECISION , `words_match` DOUBLE PRECISION , `words_rep` DOUBLE PRECISION , `words_ice` DOUBLE PRECISION );
+INSERT INTO `jobTypes` VALUES(1,1,'Translation','EN','ES','25.0','25.0','50.0','0.065','0.065','0.039','0.039','0.026','0.01','0.01','0.01');
+INSERT INTO `jobTypes` VALUES(2,6,'Tran','EN','FR','25.0','25.0','50.0','0.055','0.055','0.055','0.055','0.055','0.055','0.055','0.055');
+CREATE TABLE `clients` (`id` INTEGER PRIMARY KEY AUTOINCREMENT , `clientName` VARCHAR NOT NULL , `clientEmail` VARCHAR NOT NULL , `clientPhone` VARCHAR NOT NULL , `clientContactName` VARCHAR NOT NULL );
+INSERT INTO `clients` VALUES(1,'Apple','apple@email.com',22662590,'Apple');
+INSERT INTO `clients` VALUES(2,'Apple','apple@email.com',22662590,'Apple');
+INSERT INTO `clients` VALUES(3,'Your','mom@mail.com',22112233,'ContactName');
+INSERT INTO `clients` VALUES(4,'sdf','asdf','asdfasdf','asdfasdfasdf');
+INSERT INTO `clients` VALUES(5,123,1231,1231,12313);
+COMMIT;

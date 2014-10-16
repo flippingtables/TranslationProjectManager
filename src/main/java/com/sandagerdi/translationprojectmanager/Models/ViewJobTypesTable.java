@@ -63,7 +63,7 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
         } catch (Exception e) {
         } finally {
             try {
-                c.close();
+                if (c!=null) c.close();
             } catch (SQLException ex) {
                 Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
             }
