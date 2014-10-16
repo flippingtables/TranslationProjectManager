@@ -49,8 +49,8 @@ public class JobTypesTableModel extends AbstractTableModel {
             db = new DatabaseConnection();
         }
 //        DatabaseConnection db = new DatabaseConnection();
-        CloseableIterator<JobTypes> c = null;
-        c = db.getJobTypesDao().closeableIterator();
+//        CloseableIterator<JobTypes> c = null;
+//        c = db.getJobTypesDao().closeableIterator();
 
         JobTypes macData = (JobTypes) (m_macDataVector.elementAt(row));
 

@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class DatabaseConnection {
 
-    public ConnectionSource connectionSource;// = null;
+    private ConnectionSource connectionSource;// = null;
     private final static String DATABASE_URL = "jdbc:sqlite:C:\\apps\\GitHub\\TranslationProjectManager\\translationJobs.db";
     private Dao<Clients, Integer> clientDao;
     private Dao<JobTypes, Integer> jobTypesDao;
@@ -28,7 +28,7 @@ public class DatabaseConnection {
                 connectionSource = new JdbcConnectionSource(DATABASE_URL);
             }
             // setup our database and DAOs
-            setupDatabase(connectionSource);
+//            setupDatabase(connectionSource);
 
             System.out.println("\n\nIt seems to have worked\n\n");
         } catch (SQLException ex) {
@@ -50,7 +50,7 @@ public class DatabaseConnection {
         }
     }
 
-    public void setupDatabase(ConnectionSource connectionSource) throws SQLException {
+    private void setupDatabase(ConnectionSource connectionSource) throws SQLException {
         clientDao = DaoManager.createDao(connectionSource, Clients.class);
         jobTypesDao = DaoManager.createDao(connectionSource, JobTypes.class);
         // if you need to create the table
@@ -91,14 +91,38 @@ public class DatabaseConnection {
 
         return jobTypesDao;
     }
-    
-    public void Connect(){
+
+    public void Connect() {
         try {
             if (connectionSource == null) {
-            connectionSource = new JdbcConnectionSource(DATABASE_URL);
+                connectionSource = new JdbcConnectionSource(DATABASE_URL);
             }
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public void Disconnet() {
+        if (connectionSource != null) {
+            try {
+                connectionSource.close();
+            } catch (SQLException ex) {
+                System.out.println("BUGGUR");
+                Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public void setupDatabase(){
+        try {
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.INFO, "Setting up database...");
+            if (connectionSource == null) {
+                connectionSource = new JdbcConnectionSource(DATABASE_URL);
+            }
+            setupDatabase(connectionSource);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

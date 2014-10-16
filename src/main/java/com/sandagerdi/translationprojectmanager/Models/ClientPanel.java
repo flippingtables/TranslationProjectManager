@@ -62,12 +62,6 @@ public class ClientPanel extends javax.swing.JPanel {
             }
         });
 
-        clientNameTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                clientNameTextFieldActionPerformed(evt);
-            }
-        });
-
         jLabel1.setText("Client Name:");
 
         jLabel2.setText("Client Contact Email:");
@@ -141,7 +135,7 @@ public class ClientPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(addClientButton)
                     .addComponent(labelErrorMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {clientConectEmailTextField, clientContactNameTextField, clientContactPhoneTextField, clientNameTextField, jLabel1, jLabel2, jLabel3, jLabel4});
@@ -151,18 +145,24 @@ public class ClientPanel extends javax.swing.JPanel {
     private void addClientButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addClientButtonActionPerformed
         clientName = this.clientNameTextField.getText();
         clientEmail = this.clientConectEmailTextField.getText();
-        clientContactName = this.clientNameTextField.getText();
+        clientContactName = this.clientContactNameTextField.getText();
         clientContactPhone = this.clientContactPhoneTextField.getText();
         DatabaseConnection db = new DatabaseConnection();
-       
+
         try {
 
             if (ClientAddVerifier.ClientInputAccepted(clientContactPhone, clientContactName, clientEmail, clientName)) {
                 Clients client = new Clients(clientName, clientEmail, clientContactPhone, clientContactName);
+                db.Connect();
                 db.getClientsDao().create(client);
-                
+                db.Disconnet();
                 labelErrorMessage.setText("Client added successfully");
-                
+
+                this.clientNameTextField.setText("");
+                this.clientConectEmailTextField.setText("");
+                this.clientContactNameTextField.setText("");
+                this.clientContactPhoneTextField.setText("");
+
             } else {
                 labelErrorMessage.setText("Input cannot be empty.");
             }
@@ -171,11 +171,6 @@ public class ClientPanel extends javax.swing.JPanel {
             Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_addClientButtonActionPerformed
-
-
-    private void clientNameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientNameTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_clientNameTextFieldActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

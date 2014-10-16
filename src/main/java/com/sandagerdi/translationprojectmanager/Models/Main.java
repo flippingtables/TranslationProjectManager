@@ -3,17 +3,23 @@
  */
 package com.sandagerdi.translationprojectmanager.Models;
 
+import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
+
 /**
  *
  * @author Jóannes
  */
 public class Main extends javax.swing.JFrame {
-
+    DatabaseConnection db = new DatabaseConnection();
     /**
      * Creates new form FUCKYOU
      */
     public Main() {
+        db.setupDatabase();
         initComponents();
+        //Initialize the database
+        
+        
     }
 
     /**

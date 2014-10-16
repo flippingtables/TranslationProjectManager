@@ -27,7 +27,7 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
 
     private javax.swing.JScrollPane jScrollPane1;
     private JButton jButton1;
-    private DatabaseConnection db;
+    private DatabaseConnection db = new DatabaseConnection();
 
     public ViewJobTypesTable() {
 
@@ -46,18 +46,29 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
                 jButton1ActionPerformed(evt);
             }
         });
-        db = new DatabaseConnection();
+
         db.Connect();
         CloseableIterator<JobTypes> c = null;
-        c = db.getJobTypesDao().closeableIterator();
-        Vector<Object> jobTypes = new Vector<Object>();
-        while (c.hasNext()) {
+        Vector<Object> jobTypes = null;
+        try {
+            c = db.getJobTypesDao().closeableIterator();
+            jobTypes = new Vector<Object>();
+            while (c.hasNext()) {
+                try {
+                    jobTypes.add(c.current());
+                } catch (SQLException ex) {
+                    Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } catch (Exception e) {
+        } finally {
             try {
-                jobTypes.add(c.current());
+                c.close();
             } catch (SQLException ex) {
-                Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+
         m_tableModel = new JobTypesTableModel(jobTypes);
         clientTable = new JTable(m_tableModel);
         clientTable.getModel().addTableModelListener(new TableModelListener() {
@@ -93,6 +104,7 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
         clientTable.setEnabled(true);
 
     }
+
     //Onclick method for the Button
     //Used to update the table
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -100,12 +112,21 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
     }
 
     private void updateTable() {
+        db.Connect();
         CloseableIterator<JobTypes> c = null;
         c = db.getJobTypesDao().closeableIterator();
-        Vector<Object> jobTypes =  new Vector<Object>();
-        while (c.hasNext()) {
-            try {
+        Vector<Object> jobTypes = new Vector<Object>();
+
+        try {
+            while (c.hasNext()) {
                 jobTypes.add(c.current());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                c.close();
+                db.Disconnet();
             } catch (SQLException ex) {
                 Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
             }

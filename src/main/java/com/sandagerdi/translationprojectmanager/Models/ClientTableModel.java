@@ -23,6 +23,7 @@ public class ClientTableModel extends AbstractTableModel {
     public Class[] m_colTypes = {String.class, String.class, String.class, String.class};
 
     Vector m_macDataVector;
+    DatabaseConnection db;
 
     public ClientTableModel(Vector macDataVector) {
         super();
@@ -38,9 +39,11 @@ public class ClientTableModel extends AbstractTableModel {
     }
 
     public void setValueAt(Object value, int row, int col) {
-        DatabaseConnection db = new DatabaseConnection();
-        CloseableIterator<Clients> c = null;
-        c = db.getClientsDao().closeableIterator();
+        if (db == null) {
+            db = new DatabaseConnection();
+        }
+//        CloseableIterator<Clients> c = null;
+//        c = db.getClientsDao().closeableIterator();
 
         Clients macData = (Clients) (m_macDataVector.elementAt(row));
 
@@ -98,7 +101,9 @@ public class ClientTableModel extends AbstractTableModel {
 
     public void removeRow(int row) {
         //Update the database
-        DatabaseConnection db = new DatabaseConnection();
+        if (db == null) {
+            db = new DatabaseConnection();
+        }
 
         try {
             Clients toRemove = (Clients) m_macDataVector.get(row);
@@ -114,8 +119,9 @@ public class ClientTableModel extends AbstractTableModel {
     }
 
     public void addRow(Clients client) {
-
-        DatabaseConnection db = new DatabaseConnection();
+        if (db == null) {
+            db = new DatabaseConnection();
+        }
 
         try {
             m_macDataVector.add(client);
