@@ -3,6 +3,11 @@
  */
 package com.sandagerdi.translationprojectmanager.Util;
 
+import java.util.Date;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 /**
  *
  * @author Jóannes
@@ -14,10 +19,24 @@ public class Utils {
         boolean result = false;
         try {
             Double.parseDouble(input);
-            result=true;
+            result = true;
         } catch (NumberFormatException e) {
-            result=false;
+            result = false;
         }
         return result;
+    }
+
+    public static Date parseHoursMinutes(String string) {
+        DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("HH:mm");
+        System.out.println("Input: "+ string);
+        DateTime time = dateStringFormat.parseDateTime(string);
+        
+        System.out.println("Parsed time: "+time.getHourOfDay()+":"+time.getMinuteOfHour());
+        if (time == null) {
+            return null;
+        } else {
+            return time.toDate();
+        }
+
     }
 }

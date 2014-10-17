@@ -25,6 +25,8 @@ public class Jobs {
 
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = CLIENTS_ID_FIELD_NAME)
     private Clients client;
+
+    
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = JOBTYPES_ID_FIELD_NAME)
     private JobTypes jobType;
 
@@ -38,10 +40,7 @@ public class Jobs {
 
     @DatabaseField
     private double pay_hour;
-    @DatabaseField
-    private double pay_minimum;
-    @DatabaseField
-    private double pay_rush;
+    
     @DatabaseField
     private double words_new;
     @DatabaseField
@@ -62,15 +61,13 @@ public class Jobs {
     Jobs() {
     }
 
-    public Jobs(Clients client, JobTypes jobType, Date dateCreated, Date dateDeadline, String description, double pay_hour, double pay_minimum, double pay_rush, double words_new, double words_fuzzy50, double words_fuzzy75, double words_fuzzy85, double words_fuzzy95, double words_match, double words_rep, double words_ice) {
+    public Jobs(Clients client, JobTypes jobType, Date dateCreated, Date dateDeadline, String description, double pay_hour, double words_new, double words_fuzzy50, double words_fuzzy75, double words_fuzzy85, double words_fuzzy95, double words_match, double words_rep, double words_ice) {
         this.client = client;
         this.jobType = jobType;
         this.dateCreated = dateCreated;
         this.dateDeadline = dateDeadline;
         this.description = description;
         this.pay_hour = pay_hour;
-        this.pay_minimum = pay_minimum;
-        this.pay_rush = pay_rush;
         this.words_new = words_new;
         this.words_fuzzy50 = words_fuzzy50;
         this.words_fuzzy75 = words_fuzzy75;
@@ -137,21 +134,7 @@ public class Jobs {
         this.pay_hour = pay_hour;
     }
 
-    public double getPay_minimum() {
-        return pay_minimum;
-    }
-
-    public void setPay_minimum(double pay_minimum) {
-        this.pay_minimum = pay_minimum;
-    }
-
-    public double getPay_rush() {
-        return pay_rush;
-    }
-
-    public void setPay_rush(double pay_rush) {
-        this.pay_rush = pay_rush;
-    }
+    
 
     public double getWords_new() {
         return words_new;

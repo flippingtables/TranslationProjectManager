@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class DatabaseConnection {
 
     private ConnectionSource connectionSource;// = null;
-    private final static String DATABASE_URL = "jdbc:sqlite:C:\\apps\\GitHub\\TranslationProjectManager\\translationJobs.db";
+    private final static String DATABASE_URL = "jdbc:sqlite:translationJobs.db";
 //    private final static String DATABASE_URL = "jdbc:sqlite:translationJobs.db";
     private Dao<Clients, Integer> clientDao;
     private Dao<JobTypes, Integer> jobTypesDao;

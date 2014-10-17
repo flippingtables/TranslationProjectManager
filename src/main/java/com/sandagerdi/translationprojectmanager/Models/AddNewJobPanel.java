@@ -4,15 +4,20 @@
 package com.sandagerdi.translationprojectmanager.Models;
 
 import com.j256.ormlite.dao.CloseableIterator;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import com.sandagerdi.translationprojectmanager.Repository.Jobs;
+import com.sandagerdi.translationprojectmanager.Util.Utils;
 import com.sandagerdi.translationprojectmanager.Verifiers.ClientAddVerifier;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -80,7 +85,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         cbSourceLanguage = new javax.swing.JComboBox();
         cbTargetLanguage = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        taDescription = new javax.swing.JTextArea();
         jLabel17 = new javax.swing.JLabel();
         jcDatePicker = new com.toedter.calendar.JCalendar();
         jLabel14 = new javax.swing.JLabel();
@@ -150,9 +155,9 @@ public class AddNewJobPanel extends javax.swing.JPanel {
 
         cbTargetLanguage.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "ES" }));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        taDescription.setColumns(20);
+        taDescription.setRows(5);
+        jScrollPane1.setViewportView(taDescription);
 
         jLabel17.setText("Deadline:");
 
@@ -323,7 +328,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         String ServiceType = (String) this.cbServices.getSelectedItem().toString();
         String Language_Source = (String) this.cbSourceLanguage.getSelectedItem().toString();
         String Language_Target = (String) this.cbTargetLanguage.getSelectedItem().toString();
-
+        String Description = this.taDescription.getText();
         double Pay_Hour = Double.parseDouble(this.tfHours.getText());
         double Words_Fuzzy50 = Double.parseDouble(this.tfWords_Fuzzy50.getText());
         double Words_Fuzzy75 = Double.parseDouble(this.tfWords_Fuzzy75.getText());
@@ -333,40 +338,36 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         double Words_New = Double.parseDouble(this.tfWords_New.getText());
         double Words_Rep = Double.parseDouble(this.tfWords_Rep.getText());
         double ICE = Double.parseDouble(this.tfICE.getText());
-        Date dateDeadline   = getDeadlineDate();
-        Date dateNow        = new Date();
-        
-//        try {
+        Date dateDeadline = getDeadlineDate();
+        Date dateNow = new Date();
 
+        try {
             if (ClientAddVerifier.ClientInputAccepted(" ", " ", " ", " ")) {
                 Object obj = cbClients.getSelectedItem();
                 client = (Clients) obj;
-                //VALIDATE INPUT
-                
-                /*public Jobs(
-                Clients client, JobTypes jobType, Date dateCreated,
-                Date dateDeadline, String description, double pay_hour,
-                double pay_minimum, double pay_rush, double words_new,
-                double words_fuzzy50, double words_fuzzy75, double words_fuzzy85,
-                double words_fuzzy95, double words_match, double words_rep, double words_ice) {
-                */
-//                JobTypes job = getJobTypes();
-//                Jobs newJob = new Jobs(client, ServiceType, Language_Source, Language_Target,
-//                        Pay_Hour, Pay_Minimum, Pay_RushPercent, Words_New,
-//                        Words_Fuzzy50, Words_Fuzzy75, Words_Fuzzy85, Words_Fuzzy95,
-//                        Words_Match, Words_Rep, ICE);
-//
-//                db.getJobTypesDao().create(newJob);
-//                db.getJobTypesDao().refresh(newJob);
+            //VALIDATE INPUT
+
+                /*public Jobs(Clients client, JobTypes jobType, Date dateCreated, Date dateDeadline,
+                 String description, double pay_hour, double words_new, double words_fuzzy50,
+                 double words_fuzzy75, double words_fuzzy85, double words_fuzzy95,
+                 double words_match, double words_rep, double words_ice) {
+                 */
+                JobTypes job = getJobTypes(client, ServiceType, Language_Source, Language_Target);
+                Jobs newJob = new Jobs(client, job, dateNow,
+                        dateDeadline, Description, Pay_Hour,
+                        Words_New, Words_Fuzzy50, Words_Fuzzy75, Words_Fuzzy85, Words_Fuzzy95, Words_Match, Words_Rep, ICE);
+
+                db.getJobsDao().create(newJob);
+                db.getJobsDao().refresh(newJob);
 //                labelErrorMessage.setText("Job added successfully");
 
             } else {
 //                labelErrorMessage.setText("Input cannot be empty.");
             }
 //
-//        } catch (SQLException ex) {
-//            Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_BtnAddJobTypeActionPerformed
 
     private void BtnClearFieldsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnClearFieldsActionPerformed
@@ -422,8 +423,8 @@ public class AddNewJobPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextArea jTextArea1;
     private com.toedter.calendar.JCalendar jcDatePicker;
+    private javax.swing.JTextArea taDescription;
     private javax.swing.JTextField tfHours;
     private javax.swing.JTextField tfICE;
     private javax.swing.JTextField tfTime;
@@ -446,11 +447,19 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         return TWENTY_FOUR_TF.format(
                 TWELVE_TF.parse(twelveHourTime));
     }
-    
-    private Date getDeadlineDate(){
-    
-            return new Date();
+
+    private Date getDeadlineDate() {
+        
+        Date hoursMinutes = Utils.parseHoursMinutes(tfTime.getText());
+        
+        Date d = jcDatePicker.getDate();
+        d.setHours(hoursMinutes.getHours());
+        d.setMinutes(hoursMinutes.getMinutes());
+        System.out.println("Date:"+d.toString());
+        return d;
     }
+    
+    
 
     private void initializeComboBoxes() {
         db.Connect();
@@ -516,11 +525,44 @@ public class AddNewJobPanel extends javax.swing.JPanel {
 
     }
 
-//    private JobTypes getJobTypes() {
-//        db.Connect();
-////        db.getJobTypesDao().q
-//        db.Disconnet();
-////        return new JobTypes();
-//    }
+    private JobTypes getJobTypes(Clients client, String service, String source, String target) {
+        db.Connect();
+
+        // get our query builder from the DAO
+        QueryBuilder<JobTypes, Integer> queryBuilder = db.getJobTypesDao().queryBuilder();
+        Where<JobTypes, Integer> where = queryBuilder.where();
+        try {
+            where.eq(JobTypes.CLIENTS_ID_FIELD_NAME, client.getId());
+            where.and();
+            where.eq(JobTypes.JOBTYPES_SERVICE_FIELD_NAME, service);
+            where.and();
+            where.eq(JobTypes.JOBTYPES_SOURCE_LANG_FIELD_NAME, source);
+            where.and();
+            where.eq(JobTypes.JOBTYPES_TARGET_LANG_FIELD_NAME, target);
+        } catch (SQLException ex) {
+            Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        // prepare our sql statement
+        PreparedQuery<JobTypes> preparedQuery = null;
+        try {
+            preparedQuery = queryBuilder.prepare();
+        } catch (SQLException ex) {
+            Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        List<JobTypes> accountList = null;
+        try {
+            // query for all accounts that have "qwerty" as a password
+            accountList = db.getJobTypesDao().query(preparedQuery);
+        } catch (SQLException ex) {
+            Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        db.Disconnet();
+        if (accountList.size() > 0) {
+            return accountList.get(0);
+        }
+
+        return null;
+    }
 
 }
