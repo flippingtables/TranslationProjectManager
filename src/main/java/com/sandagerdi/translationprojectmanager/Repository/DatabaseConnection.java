@@ -17,9 +17,13 @@ public class DatabaseConnection {
 
     private ConnectionSource connectionSource;// = null;
     private final static String DATABASE_URL = "jdbc:sqlite:C:\\apps\\GitHub\\TranslationProjectManager\\translationJobs.db";
+//    private final static String DATABASE_URL = "jdbc:sqlite:translationJobs.db";
     private Dao<Clients, Integer> clientDao;
     private Dao<JobTypes, Integer> jobTypesDao;
 
+    
+    private Dao<Jobs, Integer> jobsDao;
+    
     public DatabaseConnection() {
 
         try {
@@ -53,9 +57,11 @@ public class DatabaseConnection {
     private void setupDatabase(ConnectionSource connectionSource) throws SQLException {
         clientDao = DaoManager.createDao(connectionSource, Clients.class);
         jobTypesDao = DaoManager.createDao(connectionSource, JobTypes.class);
+        jobsDao = DaoManager.createDao(connectionSource, Jobs.class);
         // if you need to create the table
         TableUtils.createTableIfNotExists(connectionSource, Clients.class);
         TableUtils.createTableIfNotExists(connectionSource, JobTypes.class);
+        TableUtils.createTableIfNotExists(connectionSource, Jobs.class);
     }
 
     public Dao<Clients, Integer> getClientsDao() {
@@ -86,11 +92,20 @@ public class DatabaseConnection {
         try {
             jobTypesDao = DaoManager.createDao(connectionSource, JobTypes.class);
         } catch (SQLException ex) {
-            System.out.println("SOmething happened");
+            System.out.println("Unable to getJobTypes");
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return jobTypesDao;
+    }
+    public Dao<Jobs, Integer> getJobsDao() {
+        try {
+            jobsDao = DaoManager.createDao(connectionSource, Jobs.class);
+        } catch (SQLException ex) {
+            System.out.println("Unable to getJobs");
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return jobsDao;
     }
 
     public void Connect() {

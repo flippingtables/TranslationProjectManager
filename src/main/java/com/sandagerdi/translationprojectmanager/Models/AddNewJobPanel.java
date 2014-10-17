@@ -7,44 +7,38 @@ import com.j256.ormlite.dao.CloseableIterator;
 import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
+import com.sandagerdi.translationprojectmanager.Repository.Jobs;
+import com.sandagerdi.translationprojectmanager.Verifiers.ClientAddVerifier;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFormattedTextField;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerDateModel;
 import javax.swing.text.DateFormatter;
+import org.joda.time.DateTime;
 
 /**
  *
  * @author Jóannes
  */
 public class AddNewJobPanel extends javax.swing.JPanel {
+
     DatabaseConnection db = new DatabaseConnection();
+
     /**
      * Creates new form AddNewJobPanel
      */
     public AddNewJobPanel() {
         initComponents();
-//        SpinnerDateModel dateModel = new SpinnerDateModel();
-//        DateFormat format = new SimpleDateFormat("H:mm");
-//        DateFormatter df = new DateFormatter(format);
-//            Format df = DateFormat.getTimeInstance(DateFormat.);
-//        SimpleDateFormat df = new SimpleDateFormat("kk:mm:ss");
-        DateFormat dateFormat = new SimpleDateFormat("HHmm");
-        dateFormat.setLenient(false);
 
-        DateFormatter dateFormatter = new DateFormatter(dateFormat);
-//        jFormattedTextField1 = new JFormattedTextField(dateFormatter);
-        initializeComboBoxes();        
+        DateTime now = new DateTime();
+
+        tfTime.setText(now.getHourOfDay() + ":" + now.getMinuteOfHour());
+        initializeComboBoxes();
     }
 
     /**
@@ -67,7 +61,6 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         BtnAddJobType = new javax.swing.JButton();
         BtnClearFields = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        labelErrorMessage = new javax.swing.JLabel();
         tfWords_New = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         tfWords_Fuzzy85 = new javax.swing.JTextField();
@@ -84,18 +77,20 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         jLabel13 = new javax.swing.JLabel();
         tfICE = new javax.swing.JTextField();
         cbServices = new javax.swing.JComboBox();
-        jComboBox3 = new javax.swing.JComboBox();
-        jComboBox4 = new javax.swing.JComboBox();
+        cbSourceLanguage = new javax.swing.JComboBox();
+        cbTargetLanguage = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel17 = new javax.swing.JLabel();
         jcDatePicker = new com.toedter.calendar.JCalendar();
         jLabel14 = new javax.swing.JLabel();
         tfTime = new javax.swing.JTextField();
+        tfHours = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
 
         jLabel3.setText("Service:");
 
-        jLabel4.setText("Match:");
+        jLabel4.setText("Rep:");
 
         jLabel5.setText("Description:");
 
@@ -105,7 +100,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
 
         jLabel6.setText("Fuzzy95:");
 
-        BtnAddJobType.setText("Add Job Type");
+        BtnAddJobType.setText("Add Job");
         BtnAddJobType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnAddJobTypeActionPerformed(evt);
@@ -120,8 +115,6 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         });
 
         jLabel7.setText("New:");
-
-        labelErrorMessage.setPreferredSize(new java.awt.Dimension(0, 14));
 
         jLabel8.setText("Fuzzy 85:");
 
@@ -145,17 +138,17 @@ public class AddNewJobPanel extends javax.swing.JPanel {
 
         jLabel1.setText("Source:");
 
-        jLabel12.setText("Rep:");
+        jLabel12.setText("ICE:");
 
         jLabel2.setText("Target:");
 
-        jLabel13.setText("ICE:");
+        jLabel13.setText("Hours:");
 
         cbServices.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "EN", "FR" }));
+        cbSourceLanguage.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "EN", "FR" }));
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "ES" }));
+        cbTargetLanguage.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "ES" }));
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -167,81 +160,75 @@ public class AddNewJobPanel extends javax.swing.JPanel {
 
         tfTime.setToolTipText("HH:mm");
 
+        jLabel15.setText("Match:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 656, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel16)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel11))
+                        .addGap(9, 9, 9)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(BtnClearFields)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(BtnAddJobType))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel11)
-                                            .addComponent(jLabel3)
-                                            .addComponent(jLabel17))
-                                        .addGap(21, 21, 21)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jScrollPane1)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jcDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addGap(0, 27, Short.MAX_VALUE)
-                                                        .addComponent(labelErrorMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(jLabel14)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGap(0, 0, Short.MAX_VALUE))))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(cbClients, 0, 272, Short.MAX_VALUE)
-                                                    .addComponent(cbServices, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                .addGap(18, 18, 18)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jLabel2)
-                                                    .addComponent(jLabel1))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                    .addComponent(jComboBox3, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(jComboBox4, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                            .addComponent(jScrollPane1))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(cbClients, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(cbServices, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2)
+                                            .addComponent(jLabel1))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(cbSourceLanguage, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(cbTargetLanguage, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel12)
+                                    .addComponent(jLabel13)
                                     .addComponent(jLabel7)
                                     .addComponent(jLabel8)
                                     .addComponent(jLabel9)
+                                    .addComponent(jLabel15)
                                     .addComponent(jLabel10)
-                                    .addComponent(jLabel12)
-                                    .addComponent(jLabel13)
-                                    .addComponent(jLabel4))
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel6))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tfWords_Fuzzy95, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tfWords_New, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tfWords_Fuzzy85, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tfWords_Fuzzy50, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tfWords_Fuzzy75, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(tfWords_Rep, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(tfICE, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tfWords_Match, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(56, 56, 56))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel16)))
-                .addContainerGap())
+                                    .addComponent(tfWords_New, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfWords_Fuzzy85, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfHours, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfWords_Fuzzy50, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfWords_Match, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfWords_Fuzzy95, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfWords_Fuzzy75, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jcDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel14)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(BtnClearFields)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(BtnAddJobType))))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,7 +237,8 @@ public class AddNewJobPanel extends javax.swing.JPanel {
                 .addComponent(jLabel16)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cbClients, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -258,114 +246,123 @@ public class AddNewJobPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(cbServices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbServices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel17)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel14)
+                                .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jcDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel17)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel14)
-                                        .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(41, 41, 41)
-                                .addComponent(labelErrorMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jcDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(19, 19, 19)
+                                    .addComponent(tfWords_New, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tfWords_Fuzzy50, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel9))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel10)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(tfWords_Fuzzy75, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(tfWords_Fuzzy85, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel8))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel6)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(tfWords_Fuzzy95, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(tfWords_Match, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jLabel15))))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tfWords_Rep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(tfICE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tfHours, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel13)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(cbSourceLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(cbTargetLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(BtnAddJobType)
-                            .addComponent(BtnClearFields)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(80, 80, 80)
-                                .addComponent(jLabel12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel13))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel4))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(tfWords_New, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfWords_Fuzzy50, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfWords_Fuzzy75, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(80, 80, 80)
-                                .addComponent(tfWords_Rep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tfICE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(tfWords_Fuzzy85, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tfWords_Fuzzy95, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tfWords_Match, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(97, Short.MAX_VALUE))
+                            .addComponent(BtnClearFields))))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel10, jLabel12, jLabel13, jLabel15, jLabel4, jLabel6, jLabel7, jLabel8, jLabel9, tfHours, tfICE, tfWords_Fuzzy50, tfWords_Fuzzy75, tfWords_Fuzzy85, tfWords_Fuzzy95, tfWords_Match, tfWords_New, tfWords_Rep});
+
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnAddJobTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAddJobTypeActionPerformed
 //
-//        String ServiceType = this.tfServiceType.getText();
-//        String Language_Source = this.tfLanguage_Source.getText();
-//        String Language_Target = this.tfLanguage_Target.getText();
-//
-//        double Pay_Hour = Double.parseDouble(this.tfPay_Hour.getText());
-//        double Pay_Minimum = Double.parseDouble(this.tfPay_Minimum.getText());
-//        double Pay_RushPercent = Double.parseDouble(this.tfPay_RushPercent.getText());
-//        double Words_Fuzzy50 = Double.parseDouble(this.tfWords_Fuzzy50.getText());
-//        double Words_Fuzzy75 = Double.parseDouble(this.tfWords_Fuzzy75.getText());
-//        double Words_Fuzzy85 = Double.parseDouble(this.tfWords_Fuzzy85.getText());
-//        double Words_Fuzzy95 = Double.parseDouble(this.tfWords_Fuzzy95.getText());
-//        double Words_Match = Double.parseDouble(this.tfWords_Match.getText());
-//        double Words_New = Double.parseDouble(this.tfWords_New.getText());
-//        double Words_Rep = Double.parseDouble(this.tfWords_Rep.getText());
-//        double ICE = Double.parseDouble(this.tfICE.getText());
-//
+        Clients client = null;
+        String ServiceType = (String) this.cbServices.getSelectedItem().toString();
+        String Language_Source = (String) this.cbSourceLanguage.getSelectedItem().toString();
+        String Language_Target = (String) this.cbTargetLanguage.getSelectedItem().toString();
+
+        double Pay_Hour = Double.parseDouble(this.tfHours.getText());
+        double Words_Fuzzy50 = Double.parseDouble(this.tfWords_Fuzzy50.getText());
+        double Words_Fuzzy75 = Double.parseDouble(this.tfWords_Fuzzy75.getText());
+        double Words_Fuzzy85 = Double.parseDouble(this.tfWords_Fuzzy85.getText());
+        double Words_Fuzzy95 = Double.parseDouble(this.tfWords_Fuzzy95.getText());
+        double Words_Match = Double.parseDouble(this.tfWords_Match.getText());
+        double Words_New = Double.parseDouble(this.tfWords_New.getText());
+        double Words_Rep = Double.parseDouble(this.tfWords_Rep.getText());
+        double ICE = Double.parseDouble(this.tfICE.getText());
+        Date dateDeadline   = getDeadlineDate();
+        Date dateNow        = new Date();
+        
 //        try {
-//
-//            if (ClientAddVerifier.ClientInputAccepted(" ", " ", " ", " ")) {
-//                Object obj = jComboBox1.getSelectedItem();
-//                Clients c = (Clients) obj;
-//                //VALIDATE INPUT
-//                JobTypes newJob = new JobTypes(c, ServiceType, Language_Source, Language_Target,
-//                    Pay_Hour, Pay_Minimum, Pay_RushPercent, Words_New,
-//                    Words_Fuzzy50, Words_Fuzzy75, Words_Fuzzy85, Words_Fuzzy95,
-//                    Words_Match, Words_Rep, ICE);
+
+            if (ClientAddVerifier.ClientInputAccepted(" ", " ", " ", " ")) {
+                Object obj = cbClients.getSelectedItem();
+                client = (Clients) obj;
+                //VALIDATE INPUT
+                
+                /*public Jobs(
+                Clients client, JobTypes jobType, Date dateCreated,
+                Date dateDeadline, String description, double pay_hour,
+                double pay_minimum, double pay_rush, double words_new,
+                double words_fuzzy50, double words_fuzzy75, double words_fuzzy85,
+                double words_fuzzy95, double words_match, double words_rep, double words_ice) {
+                */
+//                JobTypes job = getJobTypes();
+//                Jobs newJob = new Jobs(client, ServiceType, Language_Source, Language_Target,
+//                        Pay_Hour, Pay_Minimum, Pay_RushPercent, Words_New,
+//                        Words_Fuzzy50, Words_Fuzzy75, Words_Fuzzy85, Words_Fuzzy95,
+//                        Words_Match, Words_Rep, ICE);
 //
 //                db.getJobTypesDao().create(newJob);
 //                db.getJobTypesDao().refresh(newJob);
 //                labelErrorMessage.setText("Job added successfully");
-//
-//            } else {
+
+            } else {
 //                labelErrorMessage.setText("Input cannot be empty.");
-//            }
+            }
 //
 //        } catch (SQLException ex) {
 //            Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -404,14 +401,15 @@ public class AddNewJobPanel extends javax.swing.JPanel {
     private javax.swing.JButton BtnClearFields;
     private javax.swing.JComboBox cbClients;
     private javax.swing.JComboBox cbServices;
-    private javax.swing.JComboBox jComboBox3;
-    private javax.swing.JComboBox jComboBox4;
+    private javax.swing.JComboBox cbSourceLanguage;
+    private javax.swing.JComboBox cbTargetLanguage;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
@@ -426,7 +424,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextArea jTextArea1;
     private com.toedter.calendar.JCalendar jcDatePicker;
-    private javax.swing.JLabel labelErrorMessage;
+    private javax.swing.JTextField tfHours;
     private javax.swing.JTextField tfICE;
     private javax.swing.JTextField tfTime;
     private javax.swing.JTextField tfWords_Fuzzy50;
@@ -438,12 +436,6 @@ public class AddNewJobPanel extends javax.swing.JPanel {
     private javax.swing.JTextField tfWords_Rep;
     // End of variables declaration//GEN-END:variables
 
-//    private Locale getLocale(String loc) {
-//        if (loc != null && loc.length > 0) {
-//            return new Locale(loc);
-//        } else
-//            return Locale.US;
-//    }
     // Replace with KK:mma if you want 0-11 interval
     private static final DateFormat TWELVE_TF = new SimpleDateFormat("hh:mma");
     // Replace with kk:mm if you want 1-24 interval
@@ -453,6 +445,11 @@ public class AddNewJobPanel extends javax.swing.JPanel {
             throws ParseException {
         return TWENTY_FOUR_TF.format(
                 TWELVE_TF.parse(twelveHourTime));
+    }
+    
+    private Date getDeadlineDate(){
+    
+            return new Date();
     }
 
     private void initializeComboBoxes() {
@@ -466,16 +463,17 @@ public class AddNewJobPanel extends javax.swing.JPanel {
             } catch (SQLException ex) {
                 Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }try {
+        }
+        try {
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(JobTypesPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         cbClients.setModel(new javax.swing.DefaultComboBoxModel(new Vector<>(clients)));
-        
+
         CloseableIterator<JobTypes> jobTypes = null;
         jobTypes = db.getJobTypesDao().closeableIterator();
-        
+
         Vector<Object> jobTypesVector = new Vector<Object>();
         while (jobTypes.hasNext()) {
             try {
@@ -483,37 +481,46 @@ public class AddNewJobPanel extends javax.swing.JPanel {
             } catch (SQLException ex) {
                 Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }try {
+        }
+        try {
             jobTypes.close();
         } catch (SQLException ex) {
             Logger.getLogger(JobTypesPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         cbServices.setModel(new javax.swing.DefaultComboBoxModel(new Vector<>(jobTypesVector)));
         db.Disconnet();
-        
+
     }
+
     private void updateServicesComboBox() {
         db.Connect();
-        Clients currentClient = (Clients)cbClients.getSelectedItem();
-        System.out.println("SelectedClient:"+currentClient.getId());
+        Clients currentClient = (Clients) cbClients.getSelectedItem();
+        System.out.println("SelectedClient:" + currentClient.getId());
         List<JobTypes> jobs = null;
         try {
             jobs = db.getJobTypesDao().queryForEq("clients_id", currentClient);
         } catch (SQLException ex) {
             Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("Number of Jobs: "+jobs.size());
-       
+        System.out.println("Number of Jobs: " + jobs.size());
+
         Vector<Object> jobTypesVector = new Vector<Object>();
-        for (JobTypes j : jobs){
-            
-                jobTypesVector.add(j.getService());
-            
+        for (JobTypes j : jobs) {
+
+            jobTypesVector.add(j.getService());
+
         }
-        
+
         cbServices.setModel(new javax.swing.DefaultComboBoxModel(new Vector<>(jobTypesVector)));
         db.Disconnet();
-        
+
     }
-    
+
+//    private JobTypes getJobTypes() {
+//        db.Connect();
+////        db.getJobTypesDao().q
+//        db.Disconnet();
+////        return new JobTypes();
+//    }
+
 }

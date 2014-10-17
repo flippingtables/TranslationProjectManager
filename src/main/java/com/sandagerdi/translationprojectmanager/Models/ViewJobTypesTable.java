@@ -78,8 +78,8 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
                 updateTable();
             }
         });
-        System.out.println(clientTable.getColumnName(1));
-        System.out.println(clientTable.getRowCount());
+//        System.out.println(clientTable.getColumnName(1));
+//        System.out.println(clientTable.getRowCount());
         jScrollPane1 = new JScrollPane();
         jScrollPane1.setViewportView(clientTable);
 
