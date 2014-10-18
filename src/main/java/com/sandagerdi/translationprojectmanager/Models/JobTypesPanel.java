@@ -3,6 +3,7 @@
  */
 package com.sandagerdi.translationprojectmanager.Models;
 
+import com.sandagerdi.translationprojectmanager.TableModels.ClientTableModel;
 import com.j256.ormlite.dao.CloseableIterator;
 import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;

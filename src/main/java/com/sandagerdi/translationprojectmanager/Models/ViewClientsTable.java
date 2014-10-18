@@ -3,6 +3,7 @@
  */
 package com.sandagerdi.translationprojectmanager.Models;
 
+import com.sandagerdi.translationprojectmanager.TableModels.ClientTableModel;
 import com.j256.ormlite.dao.CloseableIterator;
 import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
@@ -133,7 +134,7 @@ public class ViewClientsTable extends javax.swing.JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(ViewClientsTable.class.getName()).log(Level.SEVERE, null, ex);
         }
-        m_tableModel.m_macDataVector = clients;
+        m_tableModel.setM_macDataVector(clients);
         clientTable.setModel(m_tableModel);
     }
 

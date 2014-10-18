@@ -479,11 +479,21 @@ public class AddNewJobPanel extends javax.swing.JPanel {
             Logger.getLogger(JobTypesPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         cbClients.setModel(new javax.swing.DefaultComboBoxModel(new Vector<>(clients)));
-
+        db.Disconnet();
+        db.Connect();
         CloseableIterator<JobTypes> jobTypes = null;
         jobTypes = db.getJobTypesDao().closeableIterator();
-
+//        List<JobTypes> jobTypes = null;
+//        try {
+//            db.getJobTypesDao().queryForAll();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         Vector<Object> jobTypesVector = new Vector<Object>();
+//        for(JobTypes j : jobTypes){
+//            jobTypesVector.add(j);
+//        }
+        
         while (jobTypes.hasNext()) {
             try {
                 jobTypesVector.add(jobTypes.current().getService());

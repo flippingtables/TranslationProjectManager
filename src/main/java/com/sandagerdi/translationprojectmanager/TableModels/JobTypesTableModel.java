@@ -1,10 +1,8 @@
 /*
  *  Copyright Jóannes í Sandagerði 2014
  */
-package com.sandagerdi.translationprojectmanager.Models;
+package com.sandagerdi.translationprojectmanager.TableModels;
 
-import com.j256.ormlite.dao.CloseableIterator;
-import com.j256.ormlite.stmt.QueryBuilder;
 import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
@@ -29,7 +27,11 @@ public class JobTypesTableModel extends AbstractTableModel {
     public Class[] m_colTypes = {Clients.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class,
         String.class, String.class, String.class, String.class,
         String.class, String.class, String.class};
-    Vector m_macDataVector;
+    private Vector m_macDataVector;
+
+    public void setM_macDataVector(Vector m_macDataVector) {
+        this.m_macDataVector = m_macDataVector;
+    }
 
     public JobTypesTableModel(Vector macDataVector) {
         super();

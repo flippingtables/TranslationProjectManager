@@ -3,11 +3,13 @@
  */
 package com.sandagerdi.translationprojectmanager.Models;
 
-import com.sandagerdi.translationprojectmanager.TableModels.JobTypesTableModel;
 import com.j256.ormlite.dao.CloseableIterator;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
+import com.sandagerdi.translationprojectmanager.Repository.Jobs;
+import com.sandagerdi.translationprojectmanager.TableModels.JobsTableModel;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,16 +23,16 @@ import javax.swing.event.TableModelListener;
  *
  * @author Jóannes
  */
-public class ViewJobTypesTable extends javax.swing.JPanel {
+public class ViewJobsTable extends javax.swing.JPanel {
 
     private JTable clientTable;
-    private JobTypesTableModel m_tableModel;
+    private JobsTableModel m_tableModel;
 
     private javax.swing.JScrollPane jScrollPane1;
     private JButton jButton1;
     private DatabaseConnection db = new DatabaseConnection();
 
-    public ViewJobTypesTable() {
+    public ViewJobsTable() {
 
         initComponents();
     }
@@ -49,14 +51,14 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
         });
 
         db.Connect();
-        CloseableIterator<JobTypes> c = null;
-        Vector<Object> jobTypes = null;
+        CloseableIterator<Jobs> c = null;
+        Vector<Object> jobs = null;
         try {
-            c = db.getJobTypesDao().closeableIterator();
-            jobTypes = new Vector<Object>();
+            c = db.getJobsDao().closeableIterator();
+            jobs = new Vector<Object>();
             while (c.hasNext()) {
                 try {
-                    jobTypes.add(c.current());
+                    jobs.add(c.current());
                 } catch (SQLException ex) {
                     Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -64,13 +66,26 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
         } catch (Exception e) {
         } finally {
             try {
-                if (c!=null) c.close();
+                if (c != null) {
+                    c.close();
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+//        List<Jobs> jobsList;
+//        Vector<Object> jobs = null;
+//        try {
+//            jobsList = db.getJobsDao().queryForAll();
+//            for (Jobs j : jobsList) {
+//                jobs.add(j);
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(ViewJobsTable.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
-        m_tableModel = new JobTypesTableModel(jobTypes);
+        db.Disconnet();
+        m_tableModel = new JobsTableModel(jobs);
         clientTable = new JTable(m_tableModel);
         clientTable.getModel().addTableModelListener(new TableModelListener() {
 
@@ -114,13 +129,13 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
 
     private void updateTable() {
         db.Connect();
-        CloseableIterator<JobTypes> c = null;
-        c = db.getJobTypesDao().closeableIterator();
-        Vector<Object> jobTypes = new Vector<Object>();
+        CloseableIterator<Jobs> c = null;
+        c = db.getJobsDao().closeableIterator();
+        Vector<Object> jobs = new Vector<Object>();
 
         try {
             while (c.hasNext()) {
-                jobTypes.add(c.current());
+                jobs.add(c.current());
             }
         } catch (SQLException ex) {
             Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
@@ -132,7 +147,9 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
                 Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        m_tableModel.setM_macDataVector(jobTypes);
+        m_tableModel.setM_macDataVector(jobs);
         clientTable.setModel(m_tableModel);
+        db.Disconnet();
     }
+
 }

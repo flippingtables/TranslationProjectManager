@@ -1,7 +1,7 @@
 /*
  *  Copyright Jóannes í Sandagerði 2014
  */
-package com.sandagerdi.translationprojectmanager.Models;
+package com.sandagerdi.translationprojectmanager.TableModels;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.sandagerdi.translationprojectmanager.Repository.Clients;
@@ -22,7 +22,11 @@ public class ClientTableModel extends AbstractTableModel {
 
     public Class[] m_colTypes = {String.class, String.class, String.class, String.class};
 
-    Vector m_macDataVector;
+    private Vector m_macDataVector;
+
+    public void setM_macDataVector(Vector m_macDataVector) {
+        this.m_macDataVector = m_macDataVector;
+    }
     DatabaseConnection db;
 
     public ClientTableModel(Vector macDataVector) {
