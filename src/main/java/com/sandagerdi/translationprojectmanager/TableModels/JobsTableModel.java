@@ -125,7 +125,10 @@ public class JobsTableModel extends AbstractTableModel {
             case 0:
                 return ((Clients) macData.getClient()).toString();
             case 1:
-                return ((JobTypes) macData.getJobType()).toString();
+                String serv = ((JobTypes)macData.getJobType()).getService()+", " +((JobTypes)macData.getJobType()).getSource_lang()+", "+((JobTypes)macData.getJobType()).getTarget_lang();
+                
+//                return ((JobTypes) macData.getJobType()).toString();
+                return serv;
             case 2:
                 return macData.getDateDeadline().toString();
             case 3:
@@ -155,6 +158,6 @@ public class JobsTableModel extends AbstractTableModel {
     }
 
     public boolean isCellEditable(int row, int column) {
-        return (column >1);
+        return (column >2);
     }
 }

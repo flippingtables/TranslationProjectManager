@@ -171,6 +171,5 @@ public class DatabaseConnection {
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
+    }    
 }

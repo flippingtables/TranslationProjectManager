@@ -159,6 +159,6 @@ public class JobTypesTableModel extends AbstractTableModel {
     }
 
     public boolean isCellEditable(int row, int column) {
-        return (column != 4);
+        return (column != 0);
     }
 }

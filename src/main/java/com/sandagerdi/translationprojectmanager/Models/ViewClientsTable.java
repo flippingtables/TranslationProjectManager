@@ -141,9 +141,11 @@ public class ViewClientsTable extends javax.swing.JPanel {
     private void deleteRowActionPerformed(ActionEvent evt) {
         //Check if there is anything to delete
         int rowToDelete = clientTable.getSelectedRow();
+        if (rowToDelete>=0){
         System.out.println("Selected Row:" + rowToDelete);
         m_tableModel.removeRow(rowToDelete);
-//        updateTable();
+        }
+
     }
 
 }
