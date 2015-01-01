@@ -168,15 +168,15 @@ public class ViewJobsTable extends javax.swing.JPanel {
         setColumnWidths();
         clientTable.setEditingColumn(2);
         clientTable.setEnabled(true);
-        clientTable.getColumn("Hours").setCellEditor(new CellEditor(new DoubleVerifier()));
-        clientTable.getColumn("New").setCellEditor(new CellEditor(new DoubleVerifier()));
-        clientTable.getColumn("Fuzzy 50").setCellEditor(new CellEditor(new DoubleVerifier()));
-        clientTable.getColumn("Fuzzy 75").setCellEditor(new CellEditor(new DoubleVerifier()));
-        clientTable.getColumn("Fuzzy 85").setCellEditor(new CellEditor(new DoubleVerifier()));
-        clientTable.getColumn("Fuzzy 95").setCellEditor(new CellEditor(new DoubleVerifier()));
-        clientTable.getColumn("Match").setCellEditor(new CellEditor(new DoubleVerifier()));
-        clientTable.getColumn("Rep").setCellEditor(new CellEditor(new DoubleVerifier()));
-        clientTable.getColumn("ICE").setCellEditor(new CellEditor(new DoubleVerifier()));
+        clientTable.getColumn("Hours").setCellEditor(new CellEditor(textAreaAllJobs, new DoubleVerifier()));
+        clientTable.getColumn("New").setCellEditor(new CellEditor(textAreaAllJobs, new DoubleVerifier()));
+        clientTable.getColumn("Fuzzy 50").setCellEditor(new CellEditor(textAreaAllJobs, new DoubleVerifier()));
+        clientTable.getColumn("Fuzzy 75").setCellEditor(new CellEditor(textAreaAllJobs, new DoubleVerifier()));
+        clientTable.getColumn("Fuzzy 85").setCellEditor(new CellEditor(textAreaAllJobs, new DoubleVerifier()));
+        clientTable.getColumn("Fuzzy 95").setCellEditor(new CellEditor(textAreaAllJobs, new DoubleVerifier()));
+        clientTable.getColumn("Match").setCellEditor(new CellEditor(textAreaAllJobs, new DoubleVerifier()));
+        clientTable.getColumn("Rep").setCellEditor(new CellEditor(textAreaAllJobs, new DoubleVerifier()));
+        clientTable.getColumn("ICE").setCellEditor(new CellEditor(textAreaAllJobs, new DoubleVerifier()));
 
         updateJobsAllTextArea();
     }

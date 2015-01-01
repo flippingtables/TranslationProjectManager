@@ -3,7 +3,6 @@
  */
 package com.sandagerdi.translationprojectmanager.Verifiers;
 
-import java.awt.Color;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
@@ -22,13 +21,10 @@ public class DoubleVerifier extends InputVerifier {
             double inputDouble = Double.parseDouble(text);
             
             if (inputDouble >= 0.0){
-                input.setBackground(Color.WHITE);
-                verified = true;
-            } else {
-                input.setBackground(Color.RED);
+               verified = true;
             }
         } catch (NumberFormatException e) {
-            input.setBackground(Color.RED);
+            return false;
         }
         return verified;
     }
