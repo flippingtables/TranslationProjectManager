@@ -8,23 +8,21 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.joda.time.DateTime;
 
 /**
  *
  * @author Jóannes
  */
 public class DatabaseConnection {
-    
-    private ConnectionSource connectionSource;// = null;
+
+    private ConnectionSource connectionSource;
     private final static String DATABASE_URL = "jdbc:sqlite:translationJobs.db";
-//    private final static String DATABASE_URL = "jdbc:h2:mem:test.db";
-//    private final static String DATABASE_URL = "jdbc:sqlite:translationJobs.db";
+
     private Dao<Clients, Integer> clientDao;
     private Dao<JobTypes, Integer> jobTypesDao;
-
-    
     private Dao<Jobs, Integer> jobsDao;
-    
+
     public DatabaseConnection() {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -44,7 +42,6 @@ public class DatabaseConnection {
 
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            System.out.println("BUGGUR0");
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             // destroy the data source which should close underlying connections
@@ -60,6 +57,11 @@ public class DatabaseConnection {
         TableUtils.createTableIfNotExists(connectionSource, Clients.class);
         TableUtils.createTableIfNotExists(connectionSource, JobTypes.class);
         TableUtils.createTableIfNotExists(connectionSource, Jobs.class);
+
+        if (!clientDao.idExists(1)) {
+            insertSomeDataToDatabase();
+        }
+
     }
 
     public Dao<Clients, Integer> getClientsDao() {
@@ -76,11 +78,7 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             System.out.println("FUCKYUOGetClients");
         } finally {
-            try {
-                connectionSource.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Disconnect();
         }
         return clientDao;
     }
@@ -91,7 +89,6 @@ public class DatabaseConnection {
             if (connectionSource == null) {
                 connectionSource = new JdbcConnectionSource(DATABASE_URL);
             }
-
             try {
                 jobTypesDao = DaoManager.createDao(connectionSource, JobTypes.class);
             } catch (SQLException ex) {
@@ -100,16 +97,13 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             System.out.println("GetJobTypes");
         } finally {
-            try {
-                connectionSource.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Disconnect();
         }
-                return jobTypesDao;
+        return jobTypesDao;
     }
+
     public Dao<Jobs, Integer> getJobsDao() {
-        
+
         try {
             if (connectionSource == null) {
                 connectionSource = new JdbcConnectionSource(DATABASE_URL);
@@ -123,13 +117,9 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             System.out.println("GetJobsDao");
         } finally {
-            try {
-                connectionSource.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Disconnect();
         }
-        
+
         return jobsDao;
     }
 
@@ -153,8 +143,8 @@ public class DatabaseConnection {
             }
         }
     }
-    
-    public void setupDatabase(){
+
+    public void setupDatabase() {
         try {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.INFO, "Setting up database...");
             if (connectionSource == null) {
@@ -164,5 +154,45 @@ public class DatabaseConnection {
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
+    }
+
+    private void insertSomeDataToDatabase() {
+        try {
+            Clients local = new Clients("Localeyes", "email@localeyes.com", "33223344", "LocaleyesContact");
+            Clients zeit = new Clients("Zeitgeist", "email@zeitgeist.com", "33223344", "ZeitgeistContact");
+            clientDao.create(local);
+            clientDao.create(zeit);
+            clientDao.refresh(local);
+            clientDao.refresh(zeit);
+            JobTypes a = new JobTypes(local, "Translation", "EN", "ES", 25.0, 25.0, 50.0, 0.065, 0.065, 0.065, 0.026, 0.026, 0.01, 0.01, 0.01);
+            JobTypes b = new JobTypes(local, "Translation", "FR", "ES", 25.0, 25.0, 50.0, 0.065, 0.065, 0.065, 0.026, 0.026, 0.01, 0.01, 0.01);
+            JobTypes c = new JobTypes(local, "Review", "EN", "ES", 25.0, 25.0, 50.0, 0.02, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+            JobTypes d = new JobTypes(local, "Review", "FR", "ES", 25.0, 25.0, 50.0, 0.02, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+            JobTypes e = new JobTypes(local, "DTP", "", "", 25.0, 25.0, 50.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+            jobTypesDao.create(a);
+            jobTypesDao.create(b);
+            jobTypesDao.create(c);
+            jobTypesDao.create(d);
+            jobTypesDao.create(e);
+
+            JobTypes f = new JobTypes(zeit, "Translation", "EN", "ES", 35.0, 35.0, 50.0, 0.09, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+            JobTypes g = new JobTypes(zeit, "Translation", "FR", "ES", 35.0, 35.0, 50.0, 0.09, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+            JobTypes h = new JobTypes(zeit, "Review", "EN", "ES", 35.0, 35.0, 50.0, 0.035, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+            JobTypes i = new JobTypes(zeit, "Review", "FR", "ES", 35.0, 35.0, 50.0, 0.035, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+            JobTypes j = new JobTypes(zeit, "DTP", "", "", 35.0, 35.0, 35.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+            jobTypesDao.create(f);
+            jobTypesDao.create(g);
+            jobTypesDao.create(h);
+            jobTypesDao.create(i);
+            jobTypesDao.create(j);
+
+            Jobs job = new Jobs(zeit, a, DateTime.now().toDate(), DateTime.now().toDate(), "001-13-12-434-Apple Channel Sales and Development-153578 - SST-CSnD-1745-iPadinK20iPadinexistingITInfrastructures", 0.0,1147.0,0.0,14.0,0.0,0.0,51.0,10.0,20.0);
+            jobsDao.create(job);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

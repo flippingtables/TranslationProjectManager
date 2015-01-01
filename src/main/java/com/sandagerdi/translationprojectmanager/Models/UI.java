@@ -4,6 +4,7 @@
 package com.sandagerdi.translationprojectmanager.Models;
 
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
+import java.util.logging.Logger;
 
 /**
  *
@@ -11,6 +12,8 @@ import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
  */
 public class UI extends javax.swing.JFrame {
     DatabaseConnection db = new DatabaseConnection();
+    // get a logger instance named "com.foo"
+    Logger  logger = Logger.getLogger("translator");
     private ViewJobsTable viewJobsTable;
     /**
      * Creates new form FUCKYOU

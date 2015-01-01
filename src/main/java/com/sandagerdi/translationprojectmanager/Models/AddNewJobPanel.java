@@ -100,7 +100,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         jLabel5.setText("Description:");
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel16.setText("Add a new Job Type for Client");
+        jLabel16.setText("Add a new job for client");
         jLabel16.setToolTipText("");
 
         jLabel6.setText("Fuzzy95:");
@@ -152,11 +152,17 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         cbServices.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         cbSourceLanguage.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "EN", "FR" }));
+        cbSourceLanguage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbSourceLanguageActionPerformed(evt);
+            }
+        });
 
         cbTargetLanguage.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "ES" }));
 
         taDescription.setColumns(20);
-        taDescription.setRows(5);
+        taDescription.setLineWrap(true);
+        taDescription.setRows(2);
         jScrollPane1.setViewportView(taDescription);
 
         jLabel17.setText("Deadline:");
@@ -396,6 +402,10 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         updateServicesComboBox();
     }//GEN-LAST:event_cbClientsItemStateChanged
 
+    private void cbSourceLanguageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSourceLanguageActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbSourceLanguageActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAddJobType;
@@ -437,16 +447,9 @@ public class AddNewJobPanel extends javax.swing.JPanel {
     private javax.swing.JTextField tfWords_Rep;
     // End of variables declaration//GEN-END:variables
 
-    // Replace with KK:mma if you want 0-11 interval
-    private static final DateFormat TWELVE_TF = new SimpleDateFormat("hh:mma");
-    // Replace with kk:mm if you want 1-24 interval
-    private static final DateFormat TWENTY_FOUR_TF = new SimpleDateFormat("kk:mm");
+    
 
-    public static String convertTo24HoursFormat(String twelveHourTime)
-            throws ParseException {
-        return TWENTY_FOUR_TF.format(
-                TWELVE_TF.parse(twelveHourTime));
-    }
+    
 
     private Date getDeadlineDate() {
         
@@ -515,9 +518,63 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         db.Connect();
         Clients currentClient = (Clients) cbClients.getSelectedItem();
         System.out.println("SelectedClient:" + currentClient.getId());
+        
+        QueryBuilder<JobTypes, Integer> queryBuilder = db.getJobTypesDao().queryBuilder();
+        Where<JobTypes, Integer> where = queryBuilder.where();
+        
+        String Language_Source = this.cbSourceLanguage.getSelectedItem().toString();
+        String Language_Target = this.cbTargetLanguage.getSelectedItem().toString();
+        try {
+            where.eq(JobTypes.CLIENTS_ID_FIELD_NAME, currentClient.getId());
+            
+            where.eq(JobTypes.JOBTYPES_SOURCE_LANG_FIELD_NAME, Language_Source);
+            
+            where.eq(JobTypes.JOBTYPES_TARGET_LANG_FIELD_NAME, Language_Target);
+            where.and(3);
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        // prepare our sql statement
+        PreparedQuery<JobTypes> preparedQuery = null;
+        
+        try {
+            preparedQuery = queryBuilder.prepare();
+        } catch (SQLException ex) {
+            Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+         
+        Where<JobTypes, Integer> where1 = queryBuilder.where();
+        
+        try {
+            where1.eq(JobTypes.CLIENTS_ID_FIELD_NAME, currentClient.getId());
+            where1.eq(JobTypes.JOBTYPES_SERVICE_FIELD_NAME, "DTP");
+            where1.and(2);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+        // prepare our sql statement
+        PreparedQuery<JobTypes> preparedQuery1 = null;
+        
+        try {
+            preparedQuery1 = queryBuilder.prepare();
+        } catch (SQLException ex) {
+            Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         List<JobTypes> jobs = null;
         try {
-            jobs = db.getJobTypesDao().queryForEq("clients_id", currentClient);
+            
+            jobs = db.getJobTypesDao().query(preparedQuery);
+            List<JobTypes> a = db.getJobTypesDao().query(preparedQuery1);
+            for (JobTypes a1 : a) {
+                jobs.add(a1);
+            }
+//            
         } catch (SQLException ex) {
             Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -548,7 +605,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
             where.and();
             where.eq(JobTypes.JOBTYPES_SOURCE_LANG_FIELD_NAME, source);
             where.and();
-            where.eq(JobTypes.JOBTYPES_TARGET_LANG_FIELD_NAME, target);
+            where.eq(JobTypes.JOBTYPES_TARGET_LANG_FIELD_NAME, target);            
         } catch (SQLException ex) {
             Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
         }

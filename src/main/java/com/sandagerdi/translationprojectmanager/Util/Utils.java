@@ -3,7 +3,10 @@
  */
 package com.sandagerdi.translationprojectmanager.Util;
 
+import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import org.joda.time.DateTime;
@@ -53,5 +56,16 @@ public class Utils {
         numberFormatter.setMaximumFractionDigits(2);
         
         return numberFormatter.format(input);
+    }
+    
+    public static String convertTo24HoursFormat(String twelveHourTime)
+            throws ParseException {
+        // Replace with KK:mma if you want 0-11 interval
+    DateFormat TWELVE_TF = new SimpleDateFormat("hh:mma");
+    // Replace with kk:mm if you want 1-24 interval
+    DateFormat TWENTY_FOUR_TF = new SimpleDateFormat("kk:mm");
+    
+        return TWENTY_FOUR_TF.format(
+                TWELVE_TF.parse(twelveHourTime));
     }
 }
