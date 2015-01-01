@@ -48,14 +48,7 @@ public class DatabaseConnection {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             // destroy the data source which should close underlying connections
-            if (connectionSource != null) {
-                try {
-                    connectionSource.close();
-                } catch (SQLException ex) {
-                    System.out.println("BUGGUR");
-                    Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            Disconnect();
         }
     }
 
@@ -150,7 +143,7 @@ public class DatabaseConnection {
         }
     }
 
-    public void Disconnet() {
+    public void Disconnect() {
         if (connectionSource != null) {
             try {
                 connectionSource.close();

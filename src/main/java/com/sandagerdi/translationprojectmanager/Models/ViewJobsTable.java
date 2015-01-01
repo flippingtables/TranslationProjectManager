@@ -5,17 +5,19 @@ package com.sandagerdi.translationprojectmanager.Models;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
-import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import com.sandagerdi.translationprojectmanager.Repository.Jobs;
 import com.sandagerdi.translationprojectmanager.TableModels.JobsTableModel;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
@@ -27,7 +29,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
 
     private JTable clientTable;
     private JobsTableModel m_tableModel;
-
+    JTextArea output;
     private javax.swing.JScrollPane jScrollPane1;
     private JButton jButton1;
     private DatabaseConnection db = new DatabaseConnection();
@@ -73,18 +75,9 @@ public class ViewJobsTable extends javax.swing.JPanel {
                 Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-//        List<Jobs> jobsList;
-//        Vector<Object> jobs = null;
-//        try {
-//            jobsList = db.getJobsDao().queryForAll();
-//            for (Jobs j : jobsList) {
-//                jobs.add(j);
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(ViewJobsTable.class.getName()).log(Level.SEVERE, null, ex);
-//        }
 
-        db.Disconnet();
+
+        db.Disconnect();
         m_tableModel = new JobsTableModel(jobs);
         clientTable = new JTable(m_tableModel);
         clientTable.getModel().addTableModelListener(new TableModelListener() {
@@ -94,8 +87,15 @@ public class ViewJobsTable extends javax.swing.JPanel {
                 updateTable();
             }
         });
-//        System.out.println(clientTable.getColumnName(1));
-//        System.out.println(clientTable.getRowCount());
+
+        ListSelectionModel selectionModel = clientTable.getSelectionModel();
+        selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        selectionModel.addListSelectionListener(new SharedListSelectionHandler());
+        clientTable.setSelectionModel(selectionModel);
+        
+        //Build output area.
+        output = new JTextArea(1, 10);
+        output.setEditable(false);
         jScrollPane1 = new JScrollPane();
         jScrollPane1.setViewportView(clientTable);
 
@@ -106,7 +106,9 @@ public class ViewJobsTable extends javax.swing.JPanel {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
                 .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1))
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(output))
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -114,7 +116,9 @@ public class ViewJobsTable extends javax.swing.JPanel {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
-                        .addGap(0, 56, Short.MAX_VALUE))
+                        .addGap(0, 56, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(output))
         );
         clientTable.setEditingColumn(2);
         clientTable.setEnabled(true);
@@ -125,6 +129,8 @@ public class ViewJobsTable extends javax.swing.JPanel {
     //Used to update the table
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         m_tableModel.fireTableDataChanged();
+        System.out.println("Hey");
+
     }
 
     private void updateTable() {
@@ -142,14 +148,47 @@ public class ViewJobsTable extends javax.swing.JPanel {
         } finally {
             try {
                 c.close();
-                db.Disconnet();
+                db.Disconnect();
             } catch (SQLException ex) {
                 Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         m_tableModel.setM_macDataVector(jobs);
         clientTable.setModel(m_tableModel);
-        db.Disconnet();
+        db.Disconnect();
     }
 
+class SharedListSelectionHandler implements ListSelectionListener {
+            
+    public void valueChanged(ListSelectionEvent e) {
+        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+
+        int firstIndex = e.getFirstIndex();
+        int lastIndex = e.getLastIndex();
+        boolean isAdjusting = e.getValueIsAdjusting();
+        output.append("Event for indexes "
+                      + firstIndex + " - " + lastIndex
+                      + "; isAdjusting is " + isAdjusting
+                      + "; selected indexes:");
+
+        if (lsm.isSelectionEmpty()) {
+            output.append(" <none>");
+        } else {
+            // Find out which indexes are selected.
+            int minIndex = lsm.getMinSelectionIndex();
+            int maxIndex = lsm.getMaxSelectionIndex();
+            for (int i = minIndex; i <= maxIndex; i++) {
+                if (lsm.isSelectedIndex(i)) {
+                    output.append(" " + i);
+                    
+                    for (int j = 0; j < m_tableModel.getColumnCount(); j++) {
+                        output.append(", "+m_tableModel.getValueAt(i, j));
+                    }
+
+                }
+            }
+        }
+        output.append("\n");
+    }
+}
 }

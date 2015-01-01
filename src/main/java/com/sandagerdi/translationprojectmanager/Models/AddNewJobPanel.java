@@ -479,7 +479,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
             Logger.getLogger(JobTypesPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         cbClients.setModel(new javax.swing.DefaultComboBoxModel(new Vector<>(clients)));
-        db.Disconnet();
+        db.Disconnect();
         db.Connect();
         CloseableIterator<JobTypes> jobTypes = null;
         jobTypes = db.getJobTypesDao().closeableIterator();
@@ -507,7 +507,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
             Logger.getLogger(JobTypesPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         cbServices.setModel(new javax.swing.DefaultComboBoxModel(new Vector<>(jobTypesVector)));
-        db.Disconnet();
+        db.Disconnect();
 
     }
 
@@ -531,7 +531,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         }
 
         cbServices.setModel(new javax.swing.DefaultComboBoxModel(new Vector<>(jobTypesVector)));
-        db.Disconnet();
+        db.Disconnect();
 
     }
 
@@ -567,7 +567,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
             Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        db.Disconnet();
+        db.Disconnect();
         if (accountList.size() > 0) {
             return accountList.get(0);
         }

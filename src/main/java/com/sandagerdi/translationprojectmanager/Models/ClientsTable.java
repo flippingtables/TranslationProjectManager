@@ -43,7 +43,7 @@ public class ClientsTable extends javax.swing.JPanel {
                 Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        db.Disconnet();
+        db.Disconnect();
         m_tableModel = new ClientTableModel(clients);
 //        clientTable = new JTable(m_tableModel);
         initComponents();
@@ -130,7 +130,7 @@ public class ClientsTable extends javax.swing.JPanel {
                 Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        db.Disconnet();
+        db.Disconnect();
         m_tableModel.setM_macDataVector(clients);
         clientTable.setModel(m_tableModel);
     }

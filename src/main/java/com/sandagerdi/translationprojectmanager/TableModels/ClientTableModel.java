@@ -1,9 +1,8 @@
 /*
- *  Copyright Jóannes í Sandagerði 2014
+ *  Copyright JÃ³annes Ã­ SandagerÃ°i 2014
  */
 package com.sandagerdi.translationprojectmanager.TableModels;
 
-import com.j256.ormlite.dao.CloseableIterator;
 import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import java.sql.SQLException;
@@ -14,7 +13,7 @@ import javax.swing.table.AbstractTableModel;
 
 /**
  *
- * @author Jóannes
+ * @author JÃ³annes
  */
 public class ClientTableModel extends AbstractTableModel {
 

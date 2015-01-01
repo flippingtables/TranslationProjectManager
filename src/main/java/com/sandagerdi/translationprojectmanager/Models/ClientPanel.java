@@ -155,7 +155,7 @@ public class ClientPanel extends javax.swing.JPanel {
                 Clients client = new Clients(clientName, clientEmail, clientContactPhone, clientContactName);
                 db.Connect();
                 db.getClientsDao().create(client);
-                db.Disconnet();
+                db.Disconnect();
                 labelErrorMessage.setText("Client added successfully");
 
                 this.clientNameTextField.setText("");

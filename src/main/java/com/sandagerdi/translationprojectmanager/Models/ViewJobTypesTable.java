@@ -127,7 +127,7 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
         } finally {
             try {
                 c.close();
-                db.Disconnet();
+                db.Disconnect();
             } catch (SQLException ex) {
                 Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
             }
