@@ -7,6 +7,7 @@ import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import com.sandagerdi.translationprojectmanager.Repository.Jobs;
+import com.sandagerdi.translationprojectmanager.Util.Utils;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -78,31 +79,31 @@ public class JobsTableModel extends AbstractTableModel {
                 macData.setDescription((String) value);
                 break;
             case 4:
-                macData.setPay_hour((double) value);
+                macData.setPay_hour(Utils.toDouble((String)value));
                 break;
             case 5:
-                macData.setWords_new((double) value);
+                macData.setWords_new(Utils.toDouble((String)value));
                 break;
             case 6:
-                macData.setWords_fuzzy50((double) value);
+                macData.setWords_fuzzy50(Utils.toDouble((String)value));
                 break;
             case 7:
-                macData.setWords_fuzzy75((double) value);
+                macData.setWords_fuzzy75(Utils.toDouble((String)value));
                 break;
             case 8:
-                macData.setWords_fuzzy85((double) value);
+                macData.setWords_fuzzy85(Utils.toDouble((String)value));
                 break;
             case 9:
-                macData.setWords_fuzzy95((double) value);
+                macData.setWords_fuzzy95(Utils.toDouble((String)value));
                 break;
             case 10:
-                macData.setWords_match((double) value);
+                macData.setWords_match(Utils.toDouble((String)value));
                 break;
             case 11:
-                macData.setWords_rep((double) value);
+                macData.setWords_rep(Utils.toDouble((String)value));
                 break;
             case 12:
-                macData.setWords_ice((double) value);
+                macData.setWords_ice(Utils.toDouble((String)value));
                 break;
         }
         try {

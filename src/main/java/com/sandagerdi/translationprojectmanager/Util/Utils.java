@@ -27,6 +27,10 @@ public class Utils {
         }
         return result;
     }
+    
+    public static double toDouble(String input){
+        return Double.parseDouble(input);
+    }
 
     public static Date parseHoursMinutes(String string) {
         DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("HH:mm");

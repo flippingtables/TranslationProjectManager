@@ -26,9 +26,9 @@ public class JobTypesTableModel extends AbstractTableModel {
         "Hour", "New", "Fuzzy 50", "Fuzzy 75",
         "Fuzzy 85", "Fuzzy 95", "Match", "Rep",
         "ICE", "Min", "Rush %"};
-    public Class[] m_colTypes = {Clients.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class,
-        String.class, String.class, String.class, String.class,
-        String.class, String.class, String.class};
+    public Class[] m_colTypes = {Clients.class, String.class, String.class, String.class, Double.class, Double.class, Double.class, Double.class,
+        Double.class, Double.class, Double.class, Double.class,
+        Double.class, Double.class, Double.class};
     //private Vector m_macDataVector;
     private List<Object> m_macDataVector = Collections.synchronizedList(new ArrayList<Object>());
 
@@ -57,9 +57,6 @@ public class JobTypesTableModel extends AbstractTableModel {
         if (db == null) {
             db = new DatabaseConnection();
         }
-//        DatabaseConnection db = new DatabaseConnection();
-//        CloseableIterator<JobTypes> c = null;
-//        c = db.getJobTypesDao().closeableIterator();
 
         JobTypes macData = (JobTypes) (m_macDataVector.get(row));
 

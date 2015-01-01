@@ -9,22 +9,31 @@ import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import com.sandagerdi.translationprojectmanager.Repository.Jobs;
 import com.sandagerdi.translationprojectmanager.TableModels.JobsTableModel;
 import com.sandagerdi.translationprojectmanager.Util.Utils;
+import com.sandagerdi.translationprojectmanager.Verifiers.CellEditor;
+import com.sandagerdi.translationprojectmanager.Verifiers.DoubleVerifier;
+import java.awt.Color;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultCellEditor;
+import javax.swing.InputVerifier;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -159,6 +168,16 @@ public class ViewJobsTable extends javax.swing.JPanel {
         setColumnWidths();
         clientTable.setEditingColumn(2);
         clientTable.setEnabled(true);
+        clientTable.getColumn("Hours").setCellEditor(new CellEditor(new DoubleVerifier()));
+        clientTable.getColumn("New").setCellEditor(new CellEditor(new DoubleVerifier()));
+        clientTable.getColumn("Fuzzy 50").setCellEditor(new CellEditor(new DoubleVerifier()));
+        clientTable.getColumn("Fuzzy 75").setCellEditor(new CellEditor(new DoubleVerifier()));
+        clientTable.getColumn("Fuzzy 85").setCellEditor(new CellEditor(new DoubleVerifier()));
+        clientTable.getColumn("Fuzzy 95").setCellEditor(new CellEditor(new DoubleVerifier()));
+        clientTable.getColumn("Match").setCellEditor(new CellEditor(new DoubleVerifier()));
+        clientTable.getColumn("Rep").setCellEditor(new CellEditor(new DoubleVerifier()));
+        clientTable.getColumn("ICE").setCellEditor(new CellEditor(new DoubleVerifier()));
+
         updateJobsAllTextArea();
     }
 
@@ -281,4 +300,6 @@ public class ViewJobsTable extends javax.swing.JPanel {
             }
         }
     }
+    
+
 }
