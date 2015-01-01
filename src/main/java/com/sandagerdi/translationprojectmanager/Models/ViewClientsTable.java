@@ -9,10 +9,12 @@ import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.Event;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -60,22 +62,7 @@ public class ViewClientsTable extends javax.swing.JPanel {
             }
         });
 
-        db = new DatabaseConnection();
-        CloseableIterator<Clients> c = null;
-        c = db.getClientsDao().closeableIterator();
-        Vector<Object> clients = new Vector<Object>();
-        while (c.hasNext()) {
-            try {
-                clients.add(c.current());
-            } catch (SQLException ex) {
-                Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        try {
-            c.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(ViewClientsTable.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        List<Object> clients = getClients();
         m_tableModel = new ClientTableModel(clients);
         clientTable = new JTable(m_tableModel);
         clientTable.getModel().addTableModelListener(new TableModelListener() {
@@ -113,15 +100,11 @@ public class ViewClientsTable extends javax.swing.JPanel {
         );
     }
 
-    //Onclick method for the Button
-    //Used to update the table
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        m_tableModel.fireTableDataChanged();
-    }
-
-    private void updateTable() {
-        CloseableIterator<Clients> c = db.getClientsDao().closeableIterator();
-        Vector<Object> clients = new Vector<Object>();
+    private List<Object> getClients() {
+        db = new DatabaseConnection();
+        CloseableIterator<Clients> c = null;
+        c = db.getClientsDao().closeableIterator();
+        List<Object> clients = Collections.synchronizedList(new ArrayList<Object>());
         while (c.hasNext()) {
             try {
                 clients.add(c.current());
@@ -134,6 +117,19 @@ public class ViewClientsTable extends javax.swing.JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(ViewClientsTable.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return clients;
+    }
+
+    //Onclick method for the Button
+    //Used to update the table
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        m_tableModel.fireTableDataChanged();
+    }
+
+    private void updateTable() {
+        CloseableIterator<Clients> c = db.getClientsDao().closeableIterator();
+        List<Object> clients = getClients();
+        
         m_tableModel.setM_macDataVector(clients);
         clientTable.setModel(m_tableModel);
     }

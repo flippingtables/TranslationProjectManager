@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
@@ -30,13 +29,18 @@ public class JobTypesTableModel extends AbstractTableModel {
     public Class[] m_colTypes = {Clients.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class,
         String.class, String.class, String.class, String.class,
         String.class, String.class, String.class};
-    private Vector m_macDataVector;
+    //private Vector m_macDataVector;
+    private List<Object> m_macDataVector = Collections.synchronizedList(new ArrayList<Object>());
 
-    public void setM_macDataVector(Vector m_macDataVector) {
+    
+    
+    
+
+    public void setM_macDataVector(List<Object> m_macDataVector) {
         this.m_macDataVector = m_macDataVector;
     }
 
-    public JobTypesTableModel(Vector macDataVector) {
+    public JobTypesTableModel(List<Object> macDataVector) {
         super();
         m_macDataVector = macDataVector;
     }
@@ -57,7 +61,7 @@ public class JobTypesTableModel extends AbstractTableModel {
 //        CloseableIterator<JobTypes> c = null;
 //        c = db.getJobTypesDao().closeableIterator();
 
-        JobTypes macData = (JobTypes) (m_macDataVector.elementAt(row));
+        JobTypes macData = (JobTypes) (m_macDataVector.get(row));
 
         switch (col) {
             case 0:
@@ -123,7 +127,7 @@ public class JobTypesTableModel extends AbstractTableModel {
     }
 
     public Object getValueAt(int row, int col) {
-        JobTypes macData = (JobTypes) (m_macDataVector.elementAt(row));
+        JobTypes macData = (JobTypes) (m_macDataVector.get(row));
 
         switch (col) {
             case 0:

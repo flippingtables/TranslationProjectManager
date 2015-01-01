@@ -8,14 +8,15 @@ import com.j256.ormlite.dao.CloseableIterator;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import java.sql.SQLException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 
 /**
  *
@@ -48,16 +49,13 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
             }
         });
 
-        Vector<Object> jobTypes = getJobs();
+        List<Object> jobTypes = getJobs();
 
         m_tableModel = new JobTypesTableModel(jobTypes);
         clientTable = new JTable(m_tableModel);
-        clientTable.getModel().addTableModelListener(new TableModelListener() {
-
-            public void tableChanged(TableModelEvent e) {
-                System.out.println("SOMETHING: " + e);
-                updateTable();
-            }
+        clientTable.getModel().addTableModelListener((TableModelEvent e) -> {
+            System.out.println("SOMETHING: " + e);
+            updateTable();
         });
 //        System.out.println(clientTable.getColumnName(1));
 //        System.out.println(clientTable.getRowCount());
@@ -86,13 +84,13 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
 
     }
 
-    private Vector<Object> getJobs() {
+    private List<Object> getJobs() {
         db.Connect();
         CloseableIterator<JobTypes> c = null;
-        Vector<Object> jobTypes = null;
+        List<Object> jobTypes = null;
         try {
             c = db.getJobTypesDao().closeableIterator();
-            jobTypes = new Vector<Object>();
+            jobTypes = Collections.synchronizedList(new ArrayList<Object>());
             while (c.hasNext()) {
                 try {
                     jobTypes.add(c.current());
@@ -103,7 +101,9 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
         } catch (Exception e) {
         } finally {
             try {
-                if (c!=null) c.close();
+                if (c!=null) {
+                    c.close();
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -119,7 +119,7 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
 
     private void updateTable() {
         
-        Vector<Object> jobTypes = getJobs();
+        List<Object> jobTypes = getJobs();
 
         m_tableModel.setM_macDataVector(jobTypes);
         clientTable.setModel(m_tableModel);

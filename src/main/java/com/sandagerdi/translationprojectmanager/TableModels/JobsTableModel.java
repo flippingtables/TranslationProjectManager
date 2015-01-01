@@ -8,7 +8,10 @@ import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import com.sandagerdi.translationprojectmanager.Repository.Jobs;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,13 +38,14 @@ public class JobsTableModel extends AbstractTableModel {
         String.class, String.class, String.class, String.class,
         String.class, String.class, String.class, String.class, String.class};
 
-    private Vector m_macDataVector;
+    //private Vector m_macDataVector;
+    private List<Object> m_macDataVector = Collections.synchronizedList(new ArrayList<Object>());
 
-    public void setM_macDataVector(Vector m_macDataVector) {
+    public void setM_macDataVector(List<Object> m_macDataVector) {
         this.m_macDataVector = m_macDataVector;
     }
 
-    public JobsTableModel(Vector macDataVector) {
+    public JobsTableModel(List<Object> macDataVector) {
         super();
         m_macDataVector = macDataVector;
     }
@@ -59,7 +63,7 @@ public class JobsTableModel extends AbstractTableModel {
             db = new DatabaseConnection();
         }
 
-        Jobs macData = (Jobs) (m_macDataVector.elementAt(row));
+        Jobs macData = (Jobs) (m_macDataVector.get(row));
 
         switch (col) {
             case 0:
@@ -119,7 +123,7 @@ public class JobsTableModel extends AbstractTableModel {
     }
 
     public Object getValueAt(int row, int col) {
-        Jobs macData = (Jobs) (m_macDataVector.elementAt(row));
+        Jobs macData = (Jobs) (m_macDataVector.get(row));
 
         switch (col) {
             case 0:
@@ -155,7 +159,7 @@ public class JobsTableModel extends AbstractTableModel {
     }
     
     public Jobs getValueAtRow(int row) {
-        Jobs macData = (Jobs) (m_macDataVector.elementAt(row));
+        Jobs macData = (Jobs) (m_macDataVector.get(row));
 
         return macData;
     }

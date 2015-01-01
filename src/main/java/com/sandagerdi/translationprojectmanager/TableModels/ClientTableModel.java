@@ -6,6 +6,9 @@ package com.sandagerdi.translationprojectmanager.TableModels;
 import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,14 +24,13 @@ public class ClientTableModel extends AbstractTableModel {
 
     public Class[] m_colTypes = {String.class, String.class, String.class, String.class};
 
-    private Vector m_macDataVector;
-
-    public void setM_macDataVector(Vector m_macDataVector) {
+    private List<Object> m_macDataVector = Collections.synchronizedList(new ArrayList<Object>());
+    public void setM_macDataVector(List<Object> m_macDataVector) {
         this.m_macDataVector = m_macDataVector;
     }
     DatabaseConnection db;
 
-    public ClientTableModel(Vector macDataVector) {
+    public ClientTableModel(List<Object> macDataVector) {
         super();
         m_macDataVector = macDataVector;
     }
@@ -45,10 +47,8 @@ public class ClientTableModel extends AbstractTableModel {
         if (db == null) {
             db = new DatabaseConnection();
         }
-//        CloseableIterator<Clients> c = null;
-//        c = db.getClientsDao().closeableIterator();
 
-        Clients macData = (Clients) (m_macDataVector.elementAt(row));
+        Clients macData = (Clients) (m_macDataVector.get(row));
 
         switch (col) {
             case 0:
@@ -66,7 +66,6 @@ public class ClientTableModel extends AbstractTableModel {
         }
         try {
             db.getClientsDao().createOrUpdate(macData);
-//            fireTableCellUpdated(row, col);
             fireTableDataChanged();
         } catch (SQLException ex) {
             Logger.getLogger(ClientTableModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -82,7 +81,7 @@ public class ClientTableModel extends AbstractTableModel {
     }
 
     public Object getValueAt(int row, int col) {
-        Clients macData = (Clients) (m_macDataVector.elementAt(row));
+        Clients macData = (Clients) (m_macDataVector.get(row));
 
         switch (col) {
             case 0:
@@ -112,7 +111,7 @@ public class ClientTableModel extends AbstractTableModel {
             Clients toRemove = (Clients) m_macDataVector.get(row);
             Clients fromDB = db.getClientsDao().queryForSameId(toRemove);
             if (toRemove.equals(fromDB)) {
-                m_macDataVector.removeElementAt(row);
+                m_macDataVector.remove(toRemove);
                 db.getClientsDao().delete(toRemove);
                 fireTableDataChanged();
             }

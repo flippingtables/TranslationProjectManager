@@ -10,6 +10,9 @@ import com.sandagerdi.translationprojectmanager.Repository.Jobs;
 import com.sandagerdi.translationprojectmanager.TableModels.JobsTableModel;
 import com.sandagerdi.translationprojectmanager.Util.Utils;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,7 +66,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
         });
 
         
-        Vector<Object> jobs = getJobs();
+        List<Object> jobs = getJobs();
        
         m_tableModel = new JobsTableModel(jobs);
         clientTable = new JTable(m_tableModel);
@@ -166,8 +169,9 @@ public class ViewJobsTable extends javax.swing.JPanel {
     }
 
     private void updateTable() {
-        Vector<Object> jobs = getJobs();
+        List<Object> jobs = getJobs();
         m_tableModel.setM_macDataVector(jobs);
+        
         clientTable.setModel(m_tableModel);
         updateJobsAllTextArea();
     }
@@ -176,11 +180,11 @@ public class ViewJobsTable extends javax.swing.JPanel {
         textAreaAllJobs.setText("Total to date: " + calculatePriceForJobAll());
     }
 
-    private Vector<Object> getJobs() {
+    private List<Object> getJobs() {
         db.Connect();
         CloseableIterator<Jobs> c = null;
         c = db.getJobsDao().closeableIterator();
-        Vector<Object> jobs = new Vector<Object>();
+        List<Object> jobs = Collections.synchronizedList(new ArrayList<Object>());
         try {
             while (c.hasNext()) {
                 jobs.add(c.current());
