@@ -48,27 +48,7 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
             }
         });
 
-        db.Connect();
-        CloseableIterator<JobTypes> c = null;
-        Vector<Object> jobTypes = null;
-        try {
-            c = db.getJobTypesDao().closeableIterator();
-            jobTypes = new Vector<Object>();
-            while (c.hasNext()) {
-                try {
-                    jobTypes.add(c.current());
-                } catch (SQLException ex) {
-                    Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        } catch (Exception e) {
-        } finally {
-            try {
-                if (c!=null) c.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        Vector<Object> jobTypes = getJobs();
 
         m_tableModel = new JobTypesTableModel(jobTypes);
         clientTable = new JTable(m_tableModel);
@@ -106,6 +86,31 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
 
     }
 
+    private Vector<Object> getJobs() {
+        db.Connect();
+        CloseableIterator<JobTypes> c = null;
+        Vector<Object> jobTypes = null;
+        try {
+            c = db.getJobTypesDao().closeableIterator();
+            jobTypes = new Vector<Object>();
+            while (c.hasNext()) {
+                try {
+                    jobTypes.add(c.current());
+                } catch (SQLException ex) {
+                    Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            try {
+                if (c!=null) c.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return jobTypes;
+    }
+
     //Onclick method for the Button
     //Used to update the table
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,25 +118,9 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
     }
 
     private void updateTable() {
-        db.Connect();
-        CloseableIterator<JobTypes> c = null;
-        c = db.getJobTypesDao().closeableIterator();
-        Vector<Object> jobTypes = new Vector<Object>();
+        
+        Vector<Object> jobTypes = getJobs();
 
-        try {
-            while (c.hasNext()) {
-                jobTypes.add(c.current());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                c.close();
-                db.Disconnect();
-            } catch (SQLException ex) {
-                Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         m_tableModel.setM_macDataVector(jobTypes);
         clientTable.setModel(m_tableModel);
     }
