@@ -47,6 +47,7 @@ public class Utils {
         
         numberFormatter = NumberFormat.getNumberInstance(Locale.getDefault());
         numberFormatter.setMaximumFractionDigits(2);
+        
         return numberFormatter.format(input);
     }
 }

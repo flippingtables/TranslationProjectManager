@@ -31,11 +31,22 @@ public class ViewJobsTable extends javax.swing.JPanel {
 
     private JTable clientTable;
     private JobsTableModel m_tableModel;
-    JTextArea output;
     private javax.swing.JScrollPane jScrollPane1;
     private JButton jButton1;
     private DatabaseConnection db = new DatabaseConnection();
 
+    
+    
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextArea textAreaAllJobs;
+    private javax.swing.JTextArea textAreaSpecificJob;
+    
+    
     public ViewJobsTable() {
 
         initComponents();
@@ -96,13 +107,81 @@ public class ViewJobsTable extends javax.swing.JPanel {
         clientTable.setSelectionModel(selectionModel);
         
         //Build output area.
-        output = new JTextArea(1, 10);
-        output.setEditable(false);
+        
+        
         jScrollPane1 = new JScrollPane();
         jScrollPane1.setViewportView(clientTable);
 
+        
+        jSeparator1 = new javax.swing.JSeparator();
+        jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        textAreaAllJobs = new javax.swing.JTextArea();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        textAreaSpecificJob = new javax.swing.JTextArea();
+        
+        jButton2.setText("jButton2");
+        jLabel1.setText("This Job");
+        textAreaAllJobs.setColumns(20);
+        textAreaAllJobs.setRows(3);
+        textAreaAllJobs.setEditable(false);
+        jScrollPane3.setViewportView(textAreaAllJobs);
+        jLabel2.setText("Total For All Jobs");
+        textAreaSpecificJob.setColumns(20);
+        textAreaSpecificJob.setRows(3);
+        textAreaSpecificJob.setEditable(false);
+        jScrollPane4.setViewportView(textAreaSpecificJob);
+        
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
+        
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
+            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4))
+                        .addContainerGap())))
+        );
+        /*
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
@@ -122,6 +201,8 @@ public class ViewJobsTable extends javax.swing.JPanel {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(output))
         );
+        */
+        setColumnWidths();
         clientTable.setEditingColumn(2);
         clientTable.setEnabled(true);
 
@@ -132,6 +213,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         m_tableModel.fireTableDataChanged();
         System.out.println("Hey");
+        textAreaAllJobs.setText("Total to date: "+ calculatePriceForJobAll());
 
     }
 
@@ -159,6 +241,16 @@ public class ViewJobsTable extends javax.swing.JPanel {
         clientTable.setModel(m_tableModel);
         db.Disconnect();
     }
+    private void setColumnWidths(){
+        clientTable.getColumnModel().getColumn(0).setPreferredWidth(100);
+        for (int i = 1; i < 4; i++) {
+            clientTable.getColumnModel().getColumn(i).setPreferredWidth(150);
+        }
+        for (int i = 4; i < clientTable.getColumnCount(); i++) {
+            clientTable.getColumnModel().getColumn(i).setPreferredWidth(50);
+        }
+        clientTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+    }
 
 class SharedListSelectionHandler implements ListSelectionListener {
             
@@ -166,28 +258,16 @@ class SharedListSelectionHandler implements ListSelectionListener {
     SharedListSelectionHandler(JTable clientTable) {
             this.clientTable = clientTable;
     }
-    
     public void valueChanged(ListSelectionEvent e) {
         ListSelectionModel lsm = (ListSelectionModel)e.getSource();
-        
         if (e.getValueIsAdjusting()){ return;}
-        
         if (!lsm.isSelectionEmpty()) {
             int[] selectedRow = getSelectedRows(lsm);
             for (int i : selectedRow) {
-                output.append(" " + i);
-                    
-                    int convertRowToModel = clientTable.convertRowIndexToModel(i);
-                    
-                    output.append("Price: "+ calculatePriceForJob(m_tableModel.getValueAtRow(i)));
-                    /*
-                            for (int j = 0; j < m_tableModel.getColumnCount(); j++) {
-                        output.append(", "+m_tableModel.getValueAt(i, j));
-                    }
-                            */
+                int convertRowToModel = clientTable.convertRowIndexToModel(i);
+                    textAreaSpecificJob.setText("Pay: "+ Utils.formatDoubleToLocale(calculatePriceForJob(m_tableModel.getValueAtRow(i))));
             }
         }
-        output.append("\n");
     }
     }
 
@@ -210,8 +290,16 @@ private int[] getSelectedRows(ListSelectionModel selection) {
    }
 
 
-
-private String calculatePriceForJob(Jobs job){
+private String calculatePriceForJobAll(){
+    int columns = m_tableModel.getRowCount();
+    double total = 0.0;
+    for (int i = 0; i < columns; i++) {
+        total+=calculatePriceForJob(m_tableModel.getValueAtRow(i));
+        
+    }
+    return Utils.formatDoubleToLocale(total);
+}
+private double calculatePriceForJob(Jobs job){
     
     JobTypes jobType = job.getJobType();
     double houly = jobType.getPay_hour()        * job.getPay_hour();
@@ -224,9 +312,9 @@ private String calculatePriceForJob(Jobs job){
     double rep = jobType.getWords_rep() * job.getWords_rep();
     double ICE = jobType.getWords_ice() * job.getWords_ice();
     
-    
     double result = houly+newWords+fuzzy50+fuzzy75+fuzzy85+fuzzy95+match+rep+ICE;
-    return Utils.formatDoubleToLocale(result);
+    return result;
 }
+
 
 }
