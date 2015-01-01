@@ -90,7 +90,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
 
         ListSelectionModel selectionModel = clientTable.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        selectionModel.addListSelectionListener(new SharedListSelectionHandler());
+        selectionModel.addListSelectionListener(new SharedListSelectionHandler(clientTable));
         clientTable.setSelectionModel(selectionModel);
         
         //Build output area.
@@ -160,35 +160,49 @@ public class ViewJobsTable extends javax.swing.JPanel {
 
 class SharedListSelectionHandler implements ListSelectionListener {
             
+    JTable clientTable;
+    SharedListSelectionHandler(JTable clientTable) {
+            this.clientTable = clientTable;
+    }
+    
     public void valueChanged(ListSelectionEvent e) {
         ListSelectionModel lsm = (ListSelectionModel)e.getSource();
-
-        int firstIndex = e.getFirstIndex();
-        int lastIndex = e.getLastIndex();
-        boolean isAdjusting = e.getValueIsAdjusting();
-        output.append("Event for indexes "
-                      + firstIndex + " - " + lastIndex
-                      + "; isAdjusting is " + isAdjusting
-                      + "; selected indexes:");
-
-        if (lsm.isSelectionEmpty()) {
-            output.append(" <none>");
-        } else {
-            // Find out which indexes are selected.
-            int minIndex = lsm.getMinSelectionIndex();
-            int maxIndex = lsm.getMaxSelectionIndex();
-            for (int i = minIndex; i <= maxIndex; i++) {
-                if (lsm.isSelectedIndex(i)) {
-                    output.append(" " + i);
+        
+        if (e.getValueIsAdjusting()){ return;}
+        
+        if (!lsm.isSelectionEmpty()) {
+            int[] selectedRow = getSelectedRows(lsm);
+            for (int i : selectedRow) {
+                output.append(" " + i);
+                    
+                    int convertRowToModel = clientTable.convertRowIndexToModel(i);
                     
                     for (int j = 0; j < m_tableModel.getColumnCount(); j++) {
                         output.append(", "+m_tableModel.getValueAt(i, j));
                     }
-
-                }
             }
         }
         output.append("\n");
     }
-}
+    }
+
+private int[] getSelectedRows(ListSelectionModel selection) {
+       int iMin = selection.getMinSelectionIndex();
+       int iMax = selection.getMaxSelectionIndex();
+            if ((iMin == -1) || (iMax == -1)) {
+           return new int[0];
+       }
+       int[] rvTmp = new int[1 + (iMax - iMin)];
+       int n = 0;
+            for (int i = iMin; i <= iMax; i++) {
+                if (selection.isSelectedIndex(i)) {
+               rvTmp[n++] = i;
+           }
+       }
+       int[] rv = new int[n];
+       System.arraycopy(rvTmp, 0, rv, 0, n);
+       return rv;
+   }
+
+
 }
