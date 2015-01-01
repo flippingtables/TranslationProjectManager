@@ -153,6 +153,12 @@ public class JobsTableModel extends AbstractTableModel {
         }
         return new String();
     }
+    
+    public Jobs getValueAtRow(int row) {
+        Jobs macData = (Jobs) (m_macDataVector.elementAt(row));
+
+        return macData;
+    }
 
     public boolean isCellEditable(int row, int column) {
         return (column >2);

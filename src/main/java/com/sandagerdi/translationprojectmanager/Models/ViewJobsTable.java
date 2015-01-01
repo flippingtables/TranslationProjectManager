@@ -5,8 +5,10 @@ package com.sandagerdi.translationprojectmanager.Models;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
+import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import com.sandagerdi.translationprojectmanager.Repository.Jobs;
 import com.sandagerdi.translationprojectmanager.TableModels.JobsTableModel;
+import com.sandagerdi.translationprojectmanager.Util.Utils;
 import java.sql.SQLException;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -177,9 +179,12 @@ class SharedListSelectionHandler implements ListSelectionListener {
                     
                     int convertRowToModel = clientTable.convertRowIndexToModel(i);
                     
-                    for (int j = 0; j < m_tableModel.getColumnCount(); j++) {
+                    output.append("Price: "+ calculatePriceForJob(m_tableModel.getValueAtRow(i)));
+                    /*
+                            for (int j = 0; j < m_tableModel.getColumnCount(); j++) {
                         output.append(", "+m_tableModel.getValueAt(i, j));
                     }
+                            */
             }
         }
         output.append("\n");
@@ -204,5 +209,24 @@ private int[] getSelectedRows(ListSelectionModel selection) {
        return rv;
    }
 
+
+
+private String calculatePriceForJob(Jobs job){
+    
+    JobTypes jobType = job.getJobType();
+    double houly = jobType.getPay_hour()        * job.getPay_hour();
+    double newWords = jobType.getWords_new()    * job.getWords_new();
+    double fuzzy50 = jobType.getWords_fuzzy50() * job.getWords_fuzzy50();
+    double fuzzy75 = jobType.getWords_fuzzy75() * job.getWords_fuzzy75();
+    double fuzzy85 = jobType.getWords_fuzzy85() * job.getWords_fuzzy85();
+    double fuzzy95 = jobType.getWords_fuzzy95() * job.getWords_fuzzy95();
+    double match = jobType.getWords_match()     * job.getWords_match();
+    double rep = jobType.getWords_rep() * job.getWords_rep();
+    double ICE = jobType.getWords_ice() * job.getWords_ice();
+    
+    
+    double result = houly+newWords+fuzzy50+fuzzy75+fuzzy85+fuzzy95+match+rep+ICE;
+    return Utils.formatDoubleToLocale(result);
+}
 
 }

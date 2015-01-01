@@ -3,7 +3,9 @@
  */
 package com.sandagerdi.translationprojectmanager.Util;
 
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -37,6 +39,14 @@ public class Utils {
         } else {
             return time.toDate();
         }
-
+    }
+    
+    public static String formatDoubleToLocale(double input){
+        
+        NumberFormat numberFormatter;
+        
+        numberFormatter = NumberFormat.getNumberInstance(Locale.getDefault());
+        numberFormatter.setMaximumFractionDigits(2);
+        return numberFormatter.format(input);
     }
 }
