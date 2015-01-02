@@ -220,6 +220,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfWords_Match">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0.0"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
@@ -243,6 +246,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfWords_Fuzzy95">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0.0"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="BtnAddJobType">
       <Properties>
@@ -266,6 +272,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfWords_New">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0.0"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel8">
       <Properties>
@@ -273,6 +282,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfWords_Fuzzy85">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0.0"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel9">
       <Properties>
@@ -280,6 +292,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfWords_Fuzzy50">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0.0"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel10">
       <Properties>
@@ -287,6 +302,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfWords_Fuzzy75">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0.0"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="cbClients">
       <Properties>
@@ -320,6 +338,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfWords_Rep">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0.0"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
@@ -332,6 +353,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfICE">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0.0"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="cbServices">
       <Properties>
@@ -401,6 +425,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfHours">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0.0"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel15">
       <Properties>

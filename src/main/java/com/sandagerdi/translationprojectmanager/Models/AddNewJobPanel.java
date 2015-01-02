@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -97,6 +98,8 @@ public class AddNewJobPanel extends javax.swing.JPanel {
 
         jLabel4.setText("Rep:");
 
+        tfWords_Match.setText("0.0");
+
         jLabel5.setText("Description:");
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -104,6 +107,8 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         jLabel16.setToolTipText("");
 
         jLabel6.setText("Fuzzy95:");
+
+        tfWords_Fuzzy95.setText("0.0");
 
         BtnAddJobType.setText("Add Job");
         BtnAddJobType.addActionListener(new java.awt.event.ActionListener() {
@@ -121,11 +126,19 @@ public class AddNewJobPanel extends javax.swing.JPanel {
 
         jLabel7.setText("New:");
 
+        tfWords_New.setText("0.0");
+
         jLabel8.setText("Fuzzy 85:");
+
+        tfWords_Fuzzy85.setText("0.0");
 
         jLabel9.setText("Fuzzy 50");
 
+        tfWords_Fuzzy50.setText("0.0");
+
         jLabel10.setText("Fuzzy 75:");
+
+        tfWords_Fuzzy75.setText("0.0");
 
         cbClients.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbClients.addItemListener(new java.awt.event.ItemListener() {
@@ -145,9 +158,13 @@ public class AddNewJobPanel extends javax.swing.JPanel {
 
         jLabel12.setText("ICE:");
 
+        tfWords_Rep.setText("0.0");
+
         jLabel2.setText("Target:");
 
         jLabel13.setText("Hours:");
+
+        tfICE.setText("0.0");
 
         cbServices.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -170,6 +187,8 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         jLabel14.setText("Time:");
 
         tfTime.setToolTipText("HH:mm");
+
+        tfHours.setText("0.0");
 
         jLabel15.setText("Match:");
 
@@ -337,7 +356,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         String Description = this.taDescription.getText();
         double Pay_Hour = Double.parseDouble(this.tfHours.getText());
         double Words_Fuzzy50 = Double.parseDouble(this.tfWords_Fuzzy50.getText());
-        double Words_Fuzzy75 = Double.parseDouble(this.tfWords_Fuzzy75.getText());
+        double Words_Fuzzy75 = Double.parseDouble( this.tfWords_Fuzzy75.getText() );
         double Words_Fuzzy85 = Double.parseDouble(this.tfWords_Fuzzy85.getText());
         double Words_Fuzzy95 = Double.parseDouble(this.tfWords_Fuzzy95.getText());
         double Words_Match = Double.parseDouble(this.tfWords_Match.getText());
@@ -465,6 +484,11 @@ public class AddNewJobPanel extends javax.swing.JPanel {
     
 
     private void initializeComboBoxes() {
+        updateClientsComboBox();
+        updateServicesComboBox();
+    }
+
+    private void updateClientsComboBox() {
         db.Connect();
         CloseableIterator<Clients> c = null;
         c = db.getClientsDao().closeableIterator();
@@ -483,35 +507,6 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         }
         cbClients.setModel(new javax.swing.DefaultComboBoxModel(new Vector<>(clients)));
         db.Disconnect();
-        db.Connect();
-        CloseableIterator<JobTypes> jobTypes = null;
-        jobTypes = db.getJobTypesDao().closeableIterator();
-//        List<JobTypes> jobTypes = null;
-//        try {
-//            db.getJobTypesDao().queryForAll();
-//        } catch (SQLException ex) {
-//            Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        Vector<Object> jobTypesVector = new Vector<Object>();
-//        for(JobTypes j : jobTypes){
-//            jobTypesVector.add(j);
-//        }
-        
-        while (jobTypes.hasNext()) {
-            try {
-                jobTypesVector.add(jobTypes.current().getService());
-            } catch (SQLException ex) {
-                Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        try {
-            jobTypes.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(JobTypesPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        cbServices.setModel(new javax.swing.DefaultComboBoxModel(new Vector<>(jobTypesVector)));
-        db.Disconnect();
-
     }
 
     private void updateServicesComboBox() {
@@ -580,14 +575,14 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         }
         System.out.println("Number of Jobs: " + jobs.size());
 
-        Vector<Object> jobTypesVector = new Vector<Object>();
+        List<String> jobTypesVector = new ArrayList<>();
         for (JobTypes j : jobs) {
 
             jobTypesVector.add(j.getService());
 
         }
 
-        cbServices.setModel(new javax.swing.DefaultComboBoxModel(new Vector<>(jobTypesVector)));
+        cbServices.setModel(new javax.swing.DefaultComboBoxModel(jobTypesVector.toArray()));
         db.Disconnect();
 
     }
@@ -599,13 +594,20 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         QueryBuilder<JobTypes, Integer> queryBuilder = db.getJobTypesDao().queryBuilder();
         Where<JobTypes, Integer> where = queryBuilder.where();
         try {
-            where.eq(JobTypes.CLIENTS_ID_FIELD_NAME, client.getId());
-            where.and();
-            where.eq(JobTypes.JOBTYPES_SERVICE_FIELD_NAME, service);
-            where.and();
-            where.eq(JobTypes.JOBTYPES_SOURCE_LANG_FIELD_NAME, source);
-            where.and();
-            where.eq(JobTypes.JOBTYPES_TARGET_LANG_FIELD_NAME, target);            
+            if (("DTP").equals(service)){
+                where.eq(JobTypes.CLIENTS_ID_FIELD_NAME, client.getId());
+                where.and();
+                where.eq(JobTypes.JOBTYPES_SERVICE_FIELD_NAME, service);
+            } else {
+                where.eq(JobTypes.CLIENTS_ID_FIELD_NAME, client.getId());
+                where.and();
+                where.eq(JobTypes.JOBTYPES_SERVICE_FIELD_NAME, service);
+                where.and();
+                where.eq(JobTypes.JOBTYPES_SOURCE_LANG_FIELD_NAME, source);
+                where.and();
+                where.eq(JobTypes.JOBTYPES_TARGET_LANG_FIELD_NAME, target);  
+            }
+            
         } catch (SQLException ex) {
             Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -625,7 +627,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         }
 
         db.Disconnect();
-        if (accountList.size() > 0) {
+        if (0 <= accountList.size()) {
             return accountList.get(0);
         }
 
