@@ -4,6 +4,10 @@
 package com.sandagerdi.translationprojectmanager.Models;
 
 import com.j256.ormlite.dao.CloseableIterator;
+import com.j256.ormlite.dao.GenericRawResults;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import com.sandagerdi.translationprojectmanager.Repository.Jobs;
@@ -15,6 +19,7 @@ import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +31,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import org.joda.time.DateTime;
 
 /**
  *
@@ -66,11 +72,10 @@ public class ViewJobsTable extends javax.swing.JPanel {
             }
         });
 
-        
         List<Object> jobs = getJobs();
-       
+
         m_tableModel = new JobsTableModel(jobs);
-        clientTable = new JTable(m_tableModel){
+        clientTable = new JTable(m_tableModel) {
             //Implement table cell tool tips.           
             public String getToolTipText(MouseEvent e) {
                 String tip = null;
@@ -80,8 +85,8 @@ public class ViewJobsTable extends javax.swing.JPanel {
 
                 try {
                     //comment row, exclude heading
-                    if(rowIndex != 0){
-                      tip = getValueAt(rowIndex, colIndex).toString();
+                    if (rowIndex != 0) {
+                        tip = getValueAt(rowIndex, colIndex).toString();
                     }
                 } catch (RuntimeException e1) {
                     //catch null pointer exception if mouse is over an empty line
@@ -90,7 +95,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
                 return tip;
             }
         };
-        
+
         clientTable.getModel().addTableModelListener(new TableModelListener() {
 
             @Override
@@ -134,7 +139,8 @@ public class ViewJobsTable extends javax.swing.JPanel {
 
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
                 .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,41 +148,40 @@ public class ViewJobsTable extends javax.swing.JPanel {
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                                 .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel2)
-                                        .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))))
                         .addContainerGap())
-                .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jLabel1))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jScrollPane3)
+                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(jButton1)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton2)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(jLabel1)
-                                                .addComponent(jLabel2))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
-                                                .addComponent(jScrollPane4))
-                                        .addContainerGap())))
+                                        .addComponent(jButton2)))
+                        .addContainerGap())
         );
-       
+
         setColumnWidths();
         clientTable.setEditingColumn(2);
         clientTable.setEnabled(true);
@@ -202,13 +207,14 @@ public class ViewJobsTable extends javax.swing.JPanel {
     private void updateTable() {
         List<Object> jobs = getJobs();
         m_tableModel.setM_macDataVector(jobs);
-        
+
         clientTable.setModel(m_tableModel);
         updateJobsAllTextArea();
     }
 
     private void updateJobsAllTextArea() {
         textAreaAllJobs.setText("Total to date: " + calculatePriceForJobAll());
+        textAreaAllJobs.append("\nThis month: " + getJobPayThisMonth());
     }
 
     private List<Object> getJobs() {
@@ -222,8 +228,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
             }
         } catch (SQLException ex) {
             Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        finally {
+        } finally {
             try {
                 c.close();
                 db.Disconnect();
@@ -244,8 +249,6 @@ public class ViewJobsTable extends javax.swing.JPanel {
         }
         clientTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     }
-
-    
 
     private String calculatePriceForJobAll() {
         int columns = m_tableModel.getRowCount();
@@ -270,13 +273,12 @@ public class ViewJobsTable extends javax.swing.JPanel {
         double rep = jobType.getWords_rep() * job.getWords_rep();
         double ICE = jobType.getWords_ice() * job.getWords_ice();
 
-        
         double result = houly + newWords + fuzzy50 + fuzzy75 + fuzzy85 + fuzzy95 + match + rep + ICE;
-        if (job.isRush()){
+        if (job.isRush()) {
             // JobType has a % that is added to the job if it is a rushed
-            result *= ((jobType.getPay_rush()/100)+1);
+            result *= ((jobType.getPay_rush() / 100) + 1);
         }
-        
+
         return result;
     }
 
@@ -302,6 +304,71 @@ public class ViewJobsTable extends javax.swing.JPanel {
             }
         }
     }
-    
+
+    private String getJobPayThisMonth() {
+        //Date now = new Date();
+        DateTime from = beginningOfMonth(new DateTime());
+        //DateTime from = new DateTime(2015, 1, 1, 1, 0);
+        DateTime to = endOfMonth(from);
+        db.Connect();
+
+        double result = 0.0;
+        QueryBuilder<Jobs, Integer> qb = db.getJobsDao().queryBuilder();
+
+        Where<Jobs, Integer> where = qb.where();
+        try {
+            qb.where().between("dateDeadline", from.toDate(), to.toDate());
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewJobsTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        PreparedQuery<Jobs> preparedQuery = null;
+
+        try {
+            preparedQuery = qb.prepare();
+        } catch (SQLException ex) {
+            Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        List<Jobs> jobs = null;
+
+        try {
+            jobs = db.getJobsDao().query(preparedQuery);
+            for (Jobs job : jobs) {
+                result += calculatePriceForJob(job);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewJobsTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return Utils.formatDoubleToLocale(result);
+    }
+
+    /* Month */
+    private static DateTime endOfMonth(DateTime dateTime) {
+        return endOfDay(dateTime).withDayOfMonth(dateTime.dayOfMonth().getMaximumValue());
+    }
+
+    private static DateTime beginningOfMonth(DateTime dateTime) {
+        return beginningOfday(dateTime).withDayOfMonth(1);
+    }
+
+    /* Day */
+    private static DateTime endOfDay(DateTime dateTime) {
+        return endOfHour(dateTime).withHourOfDay(23);
+    }
+
+    private static DateTime beginningOfday(DateTime dateTime) {
+        return beginningOfHour(dateTime).withHourOfDay(0);
+    }
+
+    /* Hour */
+    private static DateTime beginningOfHour(DateTime dateTime) {
+        return dateTime.withMillisOfSecond(0).withSecondOfMinute(0).withMinuteOfHour(0);
+    }
+
+    private static DateTime endOfHour(DateTime dateTime) {
+        return dateTime.withMillisOfSecond(999).withSecondOfMinute(59).withMinuteOfHour(59);
+    }
 
 }
