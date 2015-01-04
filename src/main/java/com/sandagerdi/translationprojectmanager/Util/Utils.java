@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import javax.swing.ListSelectionModel;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -83,4 +84,22 @@ public class Utils {
          Format date = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
          return date;
     }   
+    
+    public static int[] getSelectedRows(ListSelectionModel selection) {
+        int iMin = selection.getMinSelectionIndex();
+        int iMax = selection.getMaxSelectionIndex();
+        if ((iMin == -1) || (iMax == -1)) {
+            return new int[0];
+        }
+        int[] rvTmp = new int[1 + (iMax - iMin)];
+        int n = 0;
+        for (int i = iMin; i <= iMax; i++) {
+            if (selection.isSelectedIndex(i)) {
+                rvTmp[n++] = i;
+            }
+        }
+        int[] rv = new int[n];
+        System.arraycopy(rvTmp, 0, rv, 0, n);
+        return rv;
+    }
 }

@@ -3,13 +3,10 @@
  */
 package com.sandagerdi.translationprojectmanager.Verifiers;
 
-import java.awt.Toolkit;
 import javax.swing.DefaultCellEditor;
 import javax.swing.InputVerifier;
-import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -31,8 +28,9 @@ public class CellEditor extends DefaultCellEditor {
     public boolean stopCellEditing() {
                 
         if (verifier.verify(editorComponent)==false){
-            textAreaAllJobs.append("\n please enter a number.");
+            textAreaAllJobs.append("\n please enter a number.");          
         }
+        
         return verifier.verify(editorComponent) && super.stopCellEditing();
     }
     

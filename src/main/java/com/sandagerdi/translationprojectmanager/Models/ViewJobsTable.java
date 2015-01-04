@@ -11,29 +11,21 @@ import com.sandagerdi.translationprojectmanager.TableModels.JobsTableModel;
 import com.sandagerdi.translationprojectmanager.Util.Utils;
 import com.sandagerdi.translationprojectmanager.Verifiers.CellEditor;
 import com.sandagerdi.translationprojectmanager.Verifiers.DoubleVerifier;
-import java.awt.Color;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultCellEditor;
-import javax.swing.InputVerifier;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.TableColumn;
 
 /**
  *
@@ -78,7 +70,27 @@ public class ViewJobsTable extends javax.swing.JPanel {
         List<Object> jobs = getJobs();
        
         m_tableModel = new JobsTableModel(jobs);
-        clientTable = new JTable(m_tableModel);
+        clientTable = new JTable(m_tableModel){
+            //Implement table cell tool tips.           
+            public String getToolTipText(MouseEvent e) {
+                String tip = null;
+                java.awt.Point p = e.getPoint();
+                int rowIndex = rowAtPoint(p);
+                int colIndex = columnAtPoint(p);
+
+                try {
+                    //comment row, exclude heading
+                    if(rowIndex != 0){
+                      tip = getValueAt(rowIndex, colIndex).toString();
+                    }
+                } catch (RuntimeException e1) {
+                    //catch null pointer exception if mouse is over an empty line
+                }
+
+                return tip;
+            }
+        };
+        
         clientTable.getModel().addTableModelListener(new TableModelListener() {
 
             @Override
@@ -210,7 +222,8 @@ public class ViewJobsTable extends javax.swing.JPanel {
             }
         } catch (SQLException ex) {
             Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
+        } 
+        finally {
             try {
                 c.close();
                 db.Disconnect();
@@ -218,7 +231,6 @@ public class ViewJobsTable extends javax.swing.JPanel {
                 Logger.getLogger(ViewJobTypesTable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        db.Disconnect();
         return jobs;
     }
 
@@ -233,23 +245,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
         clientTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     }
 
-    private int[] getSelectedRows(ListSelectionModel selection) {
-        int iMin = selection.getMinSelectionIndex();
-        int iMax = selection.getMaxSelectionIndex();
-        if ((iMin == -1) || (iMax == -1)) {
-            return new int[0];
-        }
-        int[] rvTmp = new int[1 + (iMax - iMin)];
-        int n = 0;
-        for (int i = iMin; i <= iMax; i++) {
-            if (selection.isSelectedIndex(i)) {
-                rvTmp[n++] = i;
-            }
-        }
-        int[] rv = new int[n];
-        System.arraycopy(rvTmp, 0, rv, 0, n);
-        return rv;
-    }
+    
 
     private String calculatePriceForJobAll() {
         int columns = m_tableModel.getRowCount();
@@ -278,7 +274,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
         double result = houly + newWords + fuzzy50 + fuzzy75 + fuzzy85 + fuzzy95 + match + rep + ICE;
         if (job.isRush()){
             // JobType has a % that is added to the job if it is a rushed
-            result = result*((jobType.getPay_rush()/100)+1);
+            result *= ((jobType.getPay_rush()/100)+1);
         }
         
         return result;
@@ -298,7 +294,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
                 return;
             }
             if (!lsm.isSelectionEmpty()) {
-                int[] selectedRow = getSelectedRows(lsm);
+                int[] selectedRow = Utils.getSelectedRows(lsm);
                 for (int i : selectedRow) {
                     int convertRowToModel = clientTable.convertRowIndexToModel(i);
                     textAreaSpecificJob.setText("Pay: " + Utils.formatDoubleToLocale(calculatePriceForJob(m_tableModel.getValueAtRow(i))));
