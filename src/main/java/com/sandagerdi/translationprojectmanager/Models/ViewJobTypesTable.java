@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 /**
  *
@@ -53,9 +54,11 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
 
         m_tableModel = new JobTypesTableModel(jobTypes);
         clientTable = new JTable(m_tableModel);
-        clientTable.getModel().addTableModelListener((TableModelEvent e) -> {
+        clientTable.getModel().addTableModelListener(new TableModelListener(){
+                public void tableChanged(TableModelEvent e) {
             System.out.println("SOMETHING: " + e);
             updateTable();
+                }
         });
 //        System.out.println(clientTable.getColumnName(1));
 //        System.out.println(clientTable.getRowCount());
