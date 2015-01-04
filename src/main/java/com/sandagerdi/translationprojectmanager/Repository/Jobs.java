@@ -57,11 +57,15 @@ public class Jobs {
     private double words_rep;
     @DatabaseField
     private double words_ice;
+    @DatabaseField
+    private boolean isRush;
+
+    
 
     Jobs() {
     }
 
-    public Jobs(Clients client, JobTypes jobType, Date dateCreated, Date dateDeadline, String description, double pay_hour, double words_new, double words_fuzzy50, double words_fuzzy75, double words_fuzzy85, double words_fuzzy95, double words_match, double words_rep, double words_ice) {
+    public Jobs(Clients client, JobTypes jobType, Date dateCreated, Date dateDeadline, String description, double pay_hour, double words_new, double words_fuzzy50, double words_fuzzy75, double words_fuzzy85, double words_fuzzy95, double words_match, double words_rep, double words_ice, boolean isRush) {
         this.client = client;
         this.jobType = jobType;
         this.dateCreated = dateCreated;
@@ -76,6 +80,7 @@ public class Jobs {
         this.words_match = words_match;
         this.words_rep = words_rep;
         this.words_ice = words_ice;
+        this.isRush = isRush;
     }
 
     public int getId() {
@@ -203,6 +208,14 @@ public class Jobs {
     @Override
     public int hashCode() {
         return this.dateCreated.hashCode();
+    }
+    
+    public boolean isRush() {
+        return isRush;
+    }
+
+    public void setIsRush(boolean isRush) {
+        this.isRush = isRush;
     }
 
     //TODO pimp this

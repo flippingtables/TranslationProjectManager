@@ -188,8 +188,10 @@ public class DatabaseConnection {
             jobTypesDao.create(i);
             jobTypesDao.create(j);
 
-            Jobs job = new Jobs(zeit, a, DateTime.now().toDate(), DateTime.now().toDate(), "001-13-12-434-Apple Channel Sales and Development-153578 - SST-CSnD-1745-iPadinK20iPadinexistingITInfrastructures", 0.0,1147.0,0.0,14.0,0.0,0.0,51.0,10.0,20.0);
+            Jobs job = new Jobs(zeit, a, DateTime.now().toDate(), DateTime.now().toDate(), "001-13-12-434-Apple Channel Sales and Development-153578 - SST-CSnD-1745-iPadinK20iPadinexistingITInfrastructures", 0.0,1147.0,0.0,14.0,0.0,0.0,51.0,10.0,20.0,false);
             jobsDao.create(job);
+            Jobs job1 = new Jobs(local, a, DateTime.now().toDate(), DateTime.now().toDate(), "Apple Channel Sales and Development-153578 - SST-CSnD-1745-iPadinK20iPadinexistingITInfrastructures", 0.0,1147.0,0.0,14.0,7.0,32.0,51.0,10.0,20.0,true);
+            jobsDao.create(job1);
             
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);

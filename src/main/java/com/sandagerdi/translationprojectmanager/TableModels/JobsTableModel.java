@@ -31,12 +31,12 @@ public class JobsTableModel extends AbstractTableModel {
     public String[] m_colNames = {
         "Client", "Service", "Deadline", "Description",
         "Hours", "New", "Fuzzy 50", "Fuzzy 75",
-        "Fuzzy 85", "Fuzzy 95", "Match", "Rep", "ICE"};
+        "Fuzzy 85", "Fuzzy 95", "Match", "Rep", "ICE", "Rush"};
 
     public Class[] m_colTypes = {
         Clients.class, JobTypes.class, String.class, String.class,
         String.class, String.class, String.class, String.class,
-        String.class, String.class, String.class, String.class, String.class};
+        String.class, String.class, String.class, String.class, String.class, Boolean.class};
 
     //private Vector m_macDataVector;
     private List<Object> m_macDataVector = Collections.synchronizedList(new ArrayList<Object>());
@@ -105,6 +105,9 @@ public class JobsTableModel extends AbstractTableModel {
             case 12:
                 macData.setWords_ice(Utils.toDouble((String)value));
                 break;
+            case 13:
+                macData.setIsRush((boolean) value);
+                break;
         }
         try {
             db.getJobsDao().createOrUpdate(macData);
@@ -127,7 +130,7 @@ public class JobsTableModel extends AbstractTableModel {
 
         switch (col) {
             case 0:
-                return ((Clients) macData.getClient()).toString();
+                return macData.getClient().toString();
             case 1:
                 String serv = getService(macData);
                 return serv;
@@ -153,6 +156,8 @@ public class JobsTableModel extends AbstractTableModel {
                 return macData.getWords_rep();
             case 12:
                 return macData.getWords_ice();
+            case 13:
+                return macData.isRush();
 
         }
         return new String();
@@ -164,6 +169,7 @@ public class JobsTableModel extends AbstractTableModel {
         return macData;
     }
 
+    @Override
     public boolean isCellEditable(int row, int column) {
         return (column >2);
     }

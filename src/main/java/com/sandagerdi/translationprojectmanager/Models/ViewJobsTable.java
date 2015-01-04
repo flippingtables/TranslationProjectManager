@@ -274,7 +274,13 @@ public class ViewJobsTable extends javax.swing.JPanel {
         double rep = jobType.getWords_rep() * job.getWords_rep();
         double ICE = jobType.getWords_ice() * job.getWords_ice();
 
+        
         double result = houly + newWords + fuzzy50 + fuzzy75 + fuzzy85 + fuzzy95 + match + rep + ICE;
+        if (job.isRush()){
+            // JobType has a % that is added to the job if it is a rushed
+            result = result*((jobType.getPay_rush()/100)+1);
+        }
+        
         return result;
     }
 
