@@ -4,22 +4,23 @@
 package com.sandagerdi.translationprojectmanager.Models;
 
 import com.j256.ormlite.dao.CloseableIterator;
-import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
+import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import com.sandagerdi.translationprojectmanager.Repository.Jobs;
 import com.sandagerdi.translationprojectmanager.TableModels.JobsTableModel;
 import com.sandagerdi.translationprojectmanager.Util.Utils;
 import com.sandagerdi.translationprojectmanager.Verifiers.CellEditor;
+import com.sandagerdi.translationprojectmanager.Verifiers.CustomComboBoxEditor;
 import com.sandagerdi.translationprojectmanager.Verifiers.DoubleVerifier;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +32,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.TableColumn;
 import org.joda.time.DateTime;
 
 /**
@@ -85,9 +87,9 @@ public class ViewJobsTable extends javax.swing.JPanel {
 
                 try {
                     //comment row, exclude heading
-                    if (rowIndex != 0) {
-                        tip = getValueAt(rowIndex, colIndex).toString();
-                    }
+
+                    tip = getValueAt(rowIndex, colIndex).toString();
+
                 } catch (RuntimeException e1) {
                     //catch null pointer exception if mouse is over an empty line
                 }
@@ -133,6 +135,25 @@ public class ViewJobsTable extends javax.swing.JPanel {
         textAreaSpecificJob.setRows(3);
         textAreaSpecificJob.setEditable(false);
         jScrollPane4.setViewportView(textAreaSpecificJob);
+
+//        clientTable.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mousePressed(MouseEvent e) {
+//                if (e.getClickCount() > 2) {
+//                    JTable target = (JTable) e.getSource();
+//                    int row = target.getSelectedRow();
+//                    int column = target.getSelectedColumn();
+//                    if (column == 1) {
+//                        int convertRowToModel = clientTable.convertRowIndexToModel(row);
+//                        TableColumn comboCol1 = clientTable.getColumnModel().getColumn(1);
+//                        comboCol1.setCellEditor(null);
+//                        Clients client = m_tableModel.getValueAtRow(convertRowToModel).getClient();
+//                        comboCol1.setCellEditor(new CustomComboBoxEditor(client));
+//                    }
+//
+//                }
+//            }
+//        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -242,7 +263,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
     private void setColumnWidths() {
         clientTable.getColumnModel().getColumn(0).setPreferredWidth(100);
         for (int i = 1; i < 4; i++) {
-            clientTable.getColumnModel().getColumn(i).setPreferredWidth(150);
+            clientTable.getColumnModel().getColumn(i).setPreferredWidth(170);
         }
         for (int i = 4; i < clientTable.getColumnCount(); i++) {
             clientTable.getColumnModel().getColumn(i).setPreferredWidth(50);
@@ -336,7 +357,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
             for (Jobs job : jobs) {
                 result += calculatePriceForJob(job);
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(ViewJobsTable.class.getName()).log(Level.SEVERE, null, ex);
         }

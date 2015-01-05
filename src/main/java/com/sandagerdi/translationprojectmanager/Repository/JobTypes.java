@@ -19,7 +19,7 @@ public class JobTypes {
     public static final String JOBTYPES_TARGET_LANG_FIELD_NAME = "target_lang";
 
     @DatabaseField(generatedId = true)
-    private int id;    
+    private int id;
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = CLIENTS_ID_FIELD_NAME)
     private Clients client;
     @DatabaseField(columnName = JOBTYPES_SERVICE_FIELD_NAME, canBeNull = false)
@@ -71,11 +71,11 @@ public class JobTypes {
         this.words_rep = words_rep;
         this.words_ice = words_ice;
     }
-    
+
     public int getId() {
         return id;
     }
-    
+
     /**
      * @return the client
      */
@@ -285,13 +285,12 @@ public class JobTypes {
     public void setWords_ice(double words_ice) {
         this.words_ice = words_ice;
     }
-    
+
     @Override
     public int hashCode() {
         return service.hashCode();
     }
 
-    
     //TODO pimp this
     @Override
     public boolean equals(Object other) {
@@ -300,5 +299,14 @@ public class JobTypes {
         }
         return service.equals(((JobTypes) other).service);
     }
-    
+
+    @Override
+    public String toString() {
+        if (!"DTP".equals(getService())) {
+            return getService() + ", " + getSource_lang() + ", " + getTarget_lang();
+        } else {
+            return getService();
+        }
+
+    }
 }
