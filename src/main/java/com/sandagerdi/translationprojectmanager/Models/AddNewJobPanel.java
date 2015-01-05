@@ -11,13 +11,14 @@ import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import com.sandagerdi.translationprojectmanager.Repository.Jobs;
+import com.sandagerdi.translationprojectmanager.Util.ClipboardManager;
 import com.sandagerdi.translationprojectmanager.Util.Utils;
 import com.sandagerdi.translationprojectmanager.Verifiers.ClientAddVerifier;
-import com.sandagerdi.translationprojectmanager.Verifiers.DoubleVerifier;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -91,6 +92,8 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         jLabel15 = new javax.swing.JLabel();
         isRushCheckBox = new javax.swing.JCheckBox();
         jLabel18 = new javax.swing.JLabel();
+        jLabelErrorMessage = new javax.swing.JLabel();
+        jButtonPasteJob = new javax.swing.JButton();
 
         jLabel3.setText("Service:");
 
@@ -167,11 +170,6 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         cbServices.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         cbSourceLanguage.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "EN", "FR" }));
-        cbSourceLanguage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbSourceLanguageActionPerformed(evt);
-            }
-        });
 
         cbTargetLanguage.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "ES" }));
 
@@ -190,20 +188,21 @@ public class AddNewJobPanel extends javax.swing.JPanel {
 
         jLabel15.setText("Match:");
 
-        isRushCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                isRushCheckBoxActionPerformed(evt);
-            }
-        });
-
         jLabel18.setText("Rush:");
         jLabel18.setPreferredSize(new java.awt.Dimension(32, 14));
+
+        jButtonPasteJob.setText("Get Clipboard");
+        jButtonPasteJob.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPasteJobActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
+            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -217,29 +216,31 @@ public class AddNewJobPanel extends javax.swing.JPanel {
                                     .addComponent(jLabel3)
                                     .addComponent(jLabel11))
                                 .addGap(9, 9, 9)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jScrollPane1)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(cbClients, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(cbServices, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGap(18, 18, 18)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel2)
-                                                .addComponent(jLabel1))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(cbSourceLanguage, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(cbTargetLanguage, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addComponent(jcDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jScrollPane1)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(cbClients, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(cbServices, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2)
+                                            .addComponent(jLabel1))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(cbSourceLanguage, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(cbTargetLanguage, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jcDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButtonPasteJob))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(274, 274, 274)
                                 .addComponent(jLabel14)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -268,7 +269,8 @@ public class AddNewJobPanel extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(BtnClearFields)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(BtnAddJobType)))))
+                                .addComponent(BtnAddJobType))
+                            .addComponent(jLabelErrorMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -280,35 +282,6 @@ public class AddNewJobPanel extends javax.swing.JPanel {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(cbClients, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel11))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(cbServices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel1)
-                                    .addComponent(cbSourceLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(cbTargetLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel17)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel14)
-                                .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jcDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -354,8 +327,40 @@ public class AddNewJobPanel extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(BtnAddJobType)
-                            .addComponent(BtnClearFields))))
-                .addContainerGap(49, Short.MAX_VALUE))
+                            .addComponent(BtnClearFields)
+                            .addComponent(jButtonPasteJob))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelErrorMessage))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(cbClients, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel11))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(cbServices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(cbSourceLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(cbTargetLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel17)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel14)
+                                .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jcDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel10, jLabel12, jLabel13, jLabel15, jLabel4, jLabel6, jLabel7, jLabel8, jLabel9, tfHours, tfICE, tfWords_Fuzzy50, tfWords_Fuzzy75, tfWords_Fuzzy85, tfWords_Fuzzy95, tfWords_Match, tfWords_Rep});
@@ -371,7 +376,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         String Description = this.taDescription.getText();
         double Pay_Hour = Double.parseDouble(this.tfHours.getText());
         double Words_Fuzzy50 = Double.parseDouble(this.tfWords_Fuzzy50.getText());
-        double Words_Fuzzy75 = Double.parseDouble( this.tfWords_Fuzzy75.getText() );
+        double Words_Fuzzy75 = Double.parseDouble(this.tfWords_Fuzzy75.getText());
         double Words_Fuzzy85 = Double.parseDouble(this.tfWords_Fuzzy85.getText());
         double Words_Fuzzy95 = Double.parseDouble(this.tfWords_Fuzzy95.getText());
         double Words_Match = Double.parseDouble(this.tfWords_Match.getText());
@@ -380,14 +385,13 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         double ICE = Double.parseDouble(this.tfICE.getText());
         Date dateDeadline = getDeadlineDate();
         Date dateNow = new Date();
-        boolean isRush  = this.isRushCheckBox.isSelected();
+        boolean isRush = this.isRushCheckBox.isSelected();
 
         try {
-            if (ClientAddVerifier.ClientInputAccepted(" ", " ", " ", " ")) {
+            if (ClientAddVerifier.StringInputVerifier(ServiceType, Language_Source, Language_Target)) {
                 Object obj = cbClients.getSelectedItem();
                 client = (Clients) obj;
-            //VALIDATE INPUT
-
+                //VALIDATE INPUT
                 /*public Jobs(Clients client, JobTypes jobType, Date dateCreated, Date dateDeadline,
                  String description, double pay_hour, double words_new, double words_fuzzy50,
                  double words_fuzzy75, double words_fuzzy85, double words_fuzzy95,
@@ -401,10 +405,10 @@ public class AddNewJobPanel extends javax.swing.JPanel {
 
                 db.getJobsDao().create(newJob);
                 db.getJobsDao().refresh(newJob);
-//                labelErrorMessage.setText("Job added successfully");
+                jLabelErrorMessage.setText("Job added successfully");
 
             } else {
-//                labelErrorMessage.setText("Input cannot be empty.");
+                jLabelErrorMessage.setText("Input cannot be empty.");
             }
 //
         } catch (SQLException ex) {
@@ -438,13 +442,21 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         updateServicesComboBox();
     }//GEN-LAST:event_cbClientsItemStateChanged
 
-    private void cbSourceLanguageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSourceLanguageActionPerformed
+    private void jButtonPasteJobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPasteJobActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbSourceLanguageActionPerformed
 
-    private void isRushCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isRushCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_isRushCheckBoxActionPerformed
+        Map<String, String> jobsFromClipboard = ClipboardManager.getMatchingJobsFromClipBoard();
+        this.tfHours.setText(jobsFromClipboard.get("hours"));
+        this.tfWords_Fuzzy50.setText(jobsFromClipboard.get("50"));
+        this.tfWords_Fuzzy75.setText(jobsFromClipboard.get("75"));
+        this.tfWords_Fuzzy85.setText(jobsFromClipboard.get("85"));
+        this.tfWords_Fuzzy95.setText(jobsFromClipboard.get("95"));
+        this.tfWords_Match.setText(jobsFromClipboard.get("match"));
+        this.tfWords_New.setText(jobsFromClipboard.get("new"));
+        this.tfWords_New.setText(jobsFromClipboard.get("review"));
+        this.tfWords_Rep.setText(jobsFromClipboard.get("rep"));
+        this.tfICE.setText(jobsFromClipboard.get("ice"));
+    }//GEN-LAST:event_jButtonPasteJobActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -455,6 +467,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox cbSourceLanguage;
     private javax.swing.JComboBox cbTargetLanguage;
     private javax.swing.JCheckBox isRushCheckBox;
+    private javax.swing.JButton jButtonPasteJob;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -473,6 +486,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelErrorMessage;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private com.toedter.calendar.JCalendar jcDatePicker;
@@ -489,22 +503,16 @@ public class AddNewJobPanel extends javax.swing.JPanel {
     private javax.swing.JTextField tfWords_Rep;
     // End of variables declaration//GEN-END:variables
 
-    
-
-    
-
     private Date getDeadlineDate() {
-        
+
         Date hoursMinutes = Utils.parseHoursMinutes(tfTime.getText());
-        
+
         Date d = jcDatePicker.getDate();
         d.setHours(hoursMinutes.getHours());
         d.setMinutes(hoursMinutes.getMinutes());
-        System.out.println("Date:"+d.toString());
+        System.out.println("Date:" + d.toString());
         return d;
     }
-    
-    
 
     private void initializeComboBoxes() {
         updateClientsComboBox();
@@ -536,57 +544,55 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         db.Connect();
         Clients currentClient = (Clients) cbClients.getSelectedItem();
         System.out.println("SelectedClient:" + currentClient.getId());
-        
+
         QueryBuilder<JobTypes, Integer> queryBuilder = db.getJobTypesDao().queryBuilder();
         Where<JobTypes, Integer> where = queryBuilder.where();
-        
+
         String Language_Source = this.cbSourceLanguage.getSelectedItem().toString();
         String Language_Target = this.cbTargetLanguage.getSelectedItem().toString();
         try {
             where.eq(JobTypes.CLIENTS_ID_FIELD_NAME, currentClient.getId());
-            
+
             where.eq(JobTypes.JOBTYPES_SOURCE_LANG_FIELD_NAME, Language_Source);
-            
+
             where.eq(JobTypes.JOBTYPES_TARGET_LANG_FIELD_NAME, Language_Target);
             where.and(3);
-            
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         // prepare our sql statement
         PreparedQuery<JobTypes> preparedQuery = null;
-        
+
         try {
             preparedQuery = queryBuilder.prepare();
         } catch (SQLException ex) {
             Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-         
+
         Where<JobTypes, Integer> where1 = queryBuilder.where();
-        
+
         try {
             where1.eq(JobTypes.CLIENTS_ID_FIELD_NAME, currentClient.getId());
             where1.eq(JobTypes.JOBTYPES_SERVICE_FIELD_NAME, "DTP");
             where1.and(2);
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
+
         // prepare our sql statement
         PreparedQuery<JobTypes> preparedQuery1 = null;
-        
+
         try {
             preparedQuery1 = queryBuilder.prepare();
         } catch (SQLException ex) {
             Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         List<JobTypes> jobs = null;
         try {
-            
+
             jobs = db.getJobTypesDao().query(preparedQuery);
             List<JobTypes> a = db.getJobTypesDao().query(preparedQuery1);
             for (JobTypes a1 : a) {
@@ -617,7 +623,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         QueryBuilder<JobTypes, Integer> queryBuilder = db.getJobTypesDao().queryBuilder();
         Where<JobTypes, Integer> where = queryBuilder.where();
         try {
-            if (("DTP").equals(service)){
+            if (("DTP").equals(service)) {
                 where.eq(JobTypes.CLIENTS_ID_FIELD_NAME, client.getId());
                 where.and();
                 where.eq(JobTypes.JOBTYPES_SERVICE_FIELD_NAME, service);
@@ -628,9 +634,9 @@ public class AddNewJobPanel extends javax.swing.JPanel {
                 where.and();
                 where.eq(JobTypes.JOBTYPES_SOURCE_LANG_FIELD_NAME, source);
                 where.and();
-                where.eq(JobTypes.JOBTYPES_TARGET_LANG_FIELD_NAME, target);  
+                where.eq(JobTypes.JOBTYPES_TARGET_LANG_FIELD_NAME, target);
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(AddNewJobPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -650,7 +656,7 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         }
 
         db.Disconnect();
-        if (0 <= accountList.size()) {
+        if (accountList.size() > 0) {
             return accountList.get(0);
         }
 

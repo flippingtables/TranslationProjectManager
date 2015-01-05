@@ -16,19 +16,24 @@ public class ClientAddVerifier {
             String clientName
     ) {
 
-        if (clientContactName.equals("") || clientContactName.equals(null)) {
+        if (clientContactName == null || "".equals(clientContactName)) {
             return false;
         }
-        if (clientContactPhone.equals("") || clientContactPhone.equals(null)) {
+        if (clientContactPhone == null || "".equals(clientContactPhone)) {
             return false;
         }
-        if (clientEmail.equals("") || clientEmail.equals(null)) {
+        if (clientEmail == null || "".equals(clientEmail)) {
             return false;
         }
-        if (clientName.equals("") || clientName.equals(null)) {
-            return false;
-        }
+        return !("".equals(clientName) || clientName == null);
+    }
 
+    public static boolean StringInputVerifier(String... inputs) {
+        for (String string : inputs) {
+            if (string == null || "".equals(string)) {
+                return false;
+            }
+        }
         return true;
     }
 

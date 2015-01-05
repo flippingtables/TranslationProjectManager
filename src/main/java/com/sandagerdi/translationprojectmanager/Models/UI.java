@@ -48,12 +48,15 @@ public class UI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTabbedPane1.addTab("See Clients", viewClientsTable1);
-        jTabbedPane1.addTab("Add Job Types", jobTypesPanel1);
-        jTabbedPane1.addTab("See Job Types", viewJobTypesTable1);
-        jTabbedPane1.addTab("Add Clients", clientPanel2);
-        jTabbedPane1.addTab("Jobs", addNewJobPanel1);
         jTabbedPane1.addTab("See Jobs", viewJobsTable);
+        jTabbedPane1.addTab("Add Jobs", addNewJobPanel1);
+        
+        jTabbedPane1.addTab("See Job Types", viewJobTypesTable1);
+        jTabbedPane1.addTab("Add Job Types", jobTypesPanel1);
+        
+        jTabbedPane1.addTab("See Clients", viewClientsTable1);
+        jTabbedPane1.addTab("Add Clients", clientPanel2);
+                
         jMenu1.setText("File");
 
         jMenuItem1.setText("jMenuItem1");
