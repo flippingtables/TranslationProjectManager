@@ -259,7 +259,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
     }
 
     private void updateJobsAllTextArea() {
-        textAreaAllJobs.setText("Total to date: " + calculatePriceForJobAll());
+        textAreaAllJobs.setText("Total to date: " + Utils.calculatePriceForJobAll(m_tableModel));
         textAreaAllJobs.append("\nThis month: " + getJobPayThisMonth());
     }
 
@@ -296,37 +296,9 @@ public class ViewJobsTable extends javax.swing.JPanel {
         clientTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     }
 
-    private String calculatePriceForJobAll() {
-        int columns = m_tableModel.getRowCount();
-        double total = 0.0;
-        for (int i = 0; i < columns; i++) {
-            total += calculatePriceForJob(m_tableModel.getValueAtRow(i));
+   
 
-        }
-        return Utils.formatDoubleToLocale(total);
-    }
-
-    private double calculatePriceForJob(Jobs job) {
-
-        JobTypes jobType = job.getJobType();
-        double houly = jobType.getPay_hour() * job.getPay_hour();
-        double newWords = jobType.getWords_new() * job.getWords_new();
-        double fuzzy50 = jobType.getWords_fuzzy50() * job.getWords_fuzzy50();
-        double fuzzy75 = jobType.getWords_fuzzy75() * job.getWords_fuzzy75();
-        double fuzzy85 = jobType.getWords_fuzzy85() * job.getWords_fuzzy85();
-        double fuzzy95 = jobType.getWords_fuzzy95() * job.getWords_fuzzy95();
-        double match = jobType.getWords_match() * job.getWords_match();
-        double rep = jobType.getWords_rep() * job.getWords_rep();
-        double ICE = jobType.getWords_ice() * job.getWords_ice();
-
-        double result = houly + newWords + fuzzy50 + fuzzy75 + fuzzy85 + fuzzy95 + match + rep + ICE;
-        if (job.isRush()) {
-            // JobType has a % that is added to the job if it is a rushed
-            result *= ((jobType.getPay_rush() / 100) + 1);
-        }
-
-        return result;
-    }
+    
 
     class SharedListSelectionHandler implements ListSelectionListener {
 
@@ -345,7 +317,8 @@ public class ViewJobsTable extends javax.swing.JPanel {
                 int[] selectedRow = Utils.getSelectedRows(lsm);
                 for (int i : selectedRow) {
                     int convertRowToModel = clientTable.convertRowIndexToModel(i);
-                    textAreaSpecificJob.setText("Pay: " + Utils.formatDoubleToLocale(calculatePriceForJob(m_tableModel.getValueAtRow(i))));
+                    Jobs rowJob = (Jobs) m_tableModel.getValueAtRow(i);
+                    textAreaSpecificJob.setText("Pay: " + Utils.getFormattedPriceForJob(rowJob));
                     textAreaSpecificJob.append("\n");
                     textAreaSpecificJob.append("Date Finished:" + m_tableModel.getValueAtRow(i).getDateFinished());
                 }

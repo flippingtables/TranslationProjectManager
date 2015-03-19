@@ -3,6 +3,9 @@
  */
 package com.sandagerdi.translationprojectmanager.Util;
 
+import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
+import com.sandagerdi.translationprojectmanager.Repository.Jobs;
+import com.sandagerdi.translationprojectmanager.TableModels.JobsTableModel;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.NumberFormat;
@@ -128,5 +131,43 @@ public class Utils {
 
     public static DateTime endOfHour(DateTime dateTime) {
         return dateTime.withMillisOfSecond(999).withSecondOfMinute(59).withMinuteOfHour(59);
+    }
+    
+    
+    // JOBS Utils
+    public static double calculatePriceForJob(Jobs job) {
+
+        JobTypes jobType = job.getJobType();
+        double houly = jobType.getPay_hour() * job.getPay_hour();
+        double newWords = jobType.getWords_new() * job.getWords_new();
+        double fuzzy50 = jobType.getWords_fuzzy50() * job.getWords_fuzzy50();
+        double fuzzy75 = jobType.getWords_fuzzy75() * job.getWords_fuzzy75();
+        double fuzzy85 = jobType.getWords_fuzzy85() * job.getWords_fuzzy85();
+        double fuzzy95 = jobType.getWords_fuzzy95() * job.getWords_fuzzy95();
+        double match = jobType.getWords_match() * job.getWords_match();
+        double rep = jobType.getWords_rep() * job.getWords_rep();
+        double ICE = jobType.getWords_ice() * job.getWords_ice();
+
+        double result = houly + newWords + fuzzy50 + fuzzy75 + fuzzy85 + fuzzy95 + match + rep + ICE;
+        if (job.isRush()) {
+            // JobType has a % that is added to the job if it is a rushed
+            result *= ((jobType.getPay_rush() / 100) + 1);
+        }
+
+        return result;
+    }
+    
+    public static String getFormattedPriceForJob(Jobs job){
+        return formatDoubleToLocale(calculatePriceForJob(job));
+    }
+    
+    public static String calculatePriceForJobAll(JobsTableModel jtm) {
+        int columns = jtm.getRowCount();
+        double total = 0.0;
+        for (int i = 0; i < columns; i++) {
+            total += Utils.calculatePriceForJob(jtm.getValueAtRow(i));
+
+        }
+        return Utils.formatDoubleToLocale(total);
     }
 }
