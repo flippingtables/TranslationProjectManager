@@ -355,7 +355,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
         try {
             jobs = db.getJobsDao().query(preparedQuery);
             for (Jobs job : jobs) {
-                result += calculatePriceForJob(job);
+                result += Utils.calculatePriceForJob(job);
             }
 
         } catch (SQLException ex) {
