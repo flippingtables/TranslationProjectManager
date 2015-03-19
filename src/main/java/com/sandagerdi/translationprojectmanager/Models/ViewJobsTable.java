@@ -9,6 +9,7 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
+import com.sandagerdi.translationprojectmanager.Repository.JobStatus;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import com.sandagerdi.translationprojectmanager.Repository.Jobs;
 import com.sandagerdi.translationprojectmanager.TableModels.JobsTableModel;
@@ -45,9 +46,9 @@ public class ViewJobsTable extends javax.swing.JPanel {
     private JTable clientTable;
     private JobsTableModel m_tableModel;
     private javax.swing.JScrollPane jScrollPane1;
-    private JButton jButton1;
+    private JButton buttonRefresh;
     private DatabaseConnection db = new DatabaseConnection();
-
+    
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -68,10 +69,10 @@ public class ViewJobsTable extends javax.swing.JPanel {
     private void initComponents() {
         //jScrollPane1 = new javax.swing.JScrollPane();
         //CloseableIterator<Clients> murtur = getClients();
-        jButton1 = new javax.swing.JButton();
-        jButton1.setText("Refresh JobTypes Table");
+        buttonRefresh = new javax.swing.JButton();
+        buttonRefresh.setText("Refresh JobTypes Table");
 
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
@@ -139,6 +140,12 @@ public class ViewJobsTable extends javax.swing.JPanel {
             }
         });
         
+        buttonMarkAsDone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                markAsDoneActionPerformed(evt);
+            }
+        });
+        
         jButton2.setText("jButton2");
         jLabel1.setText("This Job");
         textAreaAllJobs.setColumns(20);
@@ -173,8 +180,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
 
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE)
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
@@ -191,15 +197,14 @@ public class ViewJobsTable extends javax.swing.JPanel {
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(buttonRefresh, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(buttonMarkAsDone)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(buttonDeleteJob)))))
                 .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -215,7 +220,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
                             .addComponent(jScrollPane3)
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(buttonRefresh)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(buttonDeleteJob)
@@ -341,6 +346,8 @@ public class ViewJobsTable extends javax.swing.JPanel {
                 for (int i : selectedRow) {
                     int convertRowToModel = clientTable.convertRowIndexToModel(i);
                     textAreaSpecificJob.setText("Pay: " + Utils.formatDoubleToLocale(calculatePriceForJob(m_tableModel.getValueAtRow(i))));
+                    textAreaSpecificJob.append("\n");
+                    textAreaSpecificJob.append("Date Finished:" + m_tableModel.getValueAtRow(i).getDateFinished());
                 }
             }
         }
@@ -396,5 +403,16 @@ public class ViewJobsTable extends javax.swing.JPanel {
         m_tableModel.removeRow(rowToDelete);
         }
 
+    }
+    
+    private void markAsDoneActionPerformed(ActionEvent evt) {
+        int rowToModify = clientTable.getSelectedRow();
+        if (rowToModify>=0){
+            System.out.println("Marking as done:" + rowToModify);
+            System.out.println("Status: " +m_tableModel.getStatus(rowToModify));
+            m_tableModel.setStatus(rowToModify, JobStatus.FINISHED);
+            System.out.println("StatusAfter: " +m_tableModel.getStatus(rowToModify));
+            
+        }
     }
 }

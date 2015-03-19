@@ -5,6 +5,7 @@ package com.sandagerdi.translationprojectmanager.TableModels;
 
 import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
+import com.sandagerdi.translationprojectmanager.Repository.JobStatus;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import com.sandagerdi.translationprojectmanager.Repository.Jobs;
 import com.sandagerdi.translationprojectmanager.Util.Utils;
@@ -200,6 +201,37 @@ public class JobsTableModel extends AbstractTableModel {
     public String getService(Jobs macData){
         String result = macData.getJobType().getService()+", "+ macData.getJobType().getSource_lang()+", "+macData.getJobType().getTarget_lang();   
         return result;
+    }
+    
+    public int getStatus(int row){
+    
+        Jobs job = (Jobs) this.m_macDataVector.get(row);
+        
+        return job.getJobStatus();
+    }
+    
+    public Date getFinished(int row){
+        Jobs job = (Jobs) this.m_macDataVector.get(row);
+        return job.getDateFinished();
+    }
+    
+    public void setStatus(int row, int jobStatus){
+        Jobs job = (Jobs) this.m_macDataVector.get(row);
+        job.setJobStatus(jobStatus);
+        
+        switch (jobStatus){
+        case JobStatus.FINISHED:
+            job.setDateFinished(new Date());
+            break;
+        }
+        if (db==null){
+            db = new DatabaseConnection();
+        }
+        try {
+            db.getJobsDao().createOrUpdate(job);
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientTableModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     
