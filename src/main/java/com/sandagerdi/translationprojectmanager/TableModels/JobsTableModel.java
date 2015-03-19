@@ -178,6 +178,25 @@ public class JobsTableModel extends AbstractTableModel {
         //return (column >0);
     }
     
+    
+    public void removeRow(int row) {
+        //Update the database
+        if (db == null) {
+            db = new DatabaseConnection();
+        }
+        try {
+            Jobs toRemove = (Jobs) m_macDataVector.get(row);
+            Jobs fromDB = db.getJobsDao().queryForSameId(toRemove);
+            if (toRemove.equals(fromDB)) {
+                m_macDataVector.remove(toRemove);
+                db.getJobsDao().delete(toRemove);
+                fireTableDataChanged();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(JobsTableModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public String getService(Jobs macData){
         String result = macData.getJobType().getService()+", "+ macData.getJobType().getSource_lang()+", "+macData.getJobType().getTarget_lang();   
         return result;

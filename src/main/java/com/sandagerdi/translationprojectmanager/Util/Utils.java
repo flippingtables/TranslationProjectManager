@@ -102,4 +102,31 @@ public class Utils {
         System.arraycopy(rvTmp, 0, rv, 0, n);
         return rv;
     }
+    
+    /* Month */
+    public static DateTime endOfMonth(DateTime dateTime) {
+        return endOfDay(dateTime).withDayOfMonth(dateTime.dayOfMonth().getMaximumValue());
+    }
+
+    public static DateTime beginningOfMonth(DateTime dateTime) {
+        return beginningOfday(dateTime).withDayOfMonth(1);
+    }
+
+    /* Day */
+    public static DateTime endOfDay(DateTime dateTime) {
+        return endOfHour(dateTime).withHourOfDay(23);
+    }
+
+    public static DateTime beginningOfday(DateTime dateTime) {
+        return beginningOfHour(dateTime).withHourOfDay(0);
+    }
+
+    /* Hour */
+    public static DateTime beginningOfHour(DateTime dateTime) {
+        return dateTime.withMillisOfSecond(0).withSecondOfMinute(0).withMinuteOfHour(0);
+    }
+
+    public static DateTime endOfHour(DateTime dateTime) {
+        return dateTime.withMillisOfSecond(999).withSecondOfMinute(59).withMinuteOfHour(59);
+    }
 }

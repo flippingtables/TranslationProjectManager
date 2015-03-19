@@ -26,7 +26,6 @@ public class Jobs {
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = CLIENTS_ID_FIELD_NAME)
     private Clients client;
 
-    
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = JOBTYPES_ID_FIELD_NAME)
     private JobTypes jobType;
 
@@ -40,7 +39,7 @@ public class Jobs {
 
     @DatabaseField
     private double pay_hour;
-    
+
     @DatabaseField
     private double words_new;
     @DatabaseField
@@ -60,7 +59,11 @@ public class Jobs {
     @DatabaseField
     private boolean isRush;
 
-    
+    // Job status
+    @DatabaseField
+    private int jobStatus;
+    @DatabaseField
+    private Date dateFinished;
 
     Jobs() {
     }
@@ -81,6 +84,9 @@ public class Jobs {
         this.words_rep = words_rep;
         this.words_ice = words_ice;
         this.isRush = isRush;
+
+        // job status
+        this.jobStatus = JobStatus.NEW;
     }
 
     public int getId() {
@@ -138,8 +144,6 @@ public class Jobs {
     public void setPay_hour(double pay_hour) {
         this.pay_hour = pay_hour;
     }
-
-    
 
     public double getWords_new() {
         return words_new;
@@ -209,7 +213,7 @@ public class Jobs {
     public int hashCode() {
         return this.dateCreated.hashCode();
     }
-    
+
     public boolean isRush() {
         return isRush;
     }
@@ -218,6 +222,22 @@ public class Jobs {
         this.isRush = isRush;
     }
 
+    public int getJobStatus() {
+        return jobStatus;
+    }
+
+    public void setJobStatus(int jobStatus) {
+        this.jobStatus = jobStatus;
+    }
+
+    public Date getDateFinished() {
+        return dateFinished;
+    }
+
+    public void setDateFinished(Date dateFinished) {
+        this.dateFinished = dateFinished;
+    }
+    
     //TODO pimp this
     @Override
     public boolean equals(Object other) {

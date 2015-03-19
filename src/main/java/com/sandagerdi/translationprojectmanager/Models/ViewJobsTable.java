@@ -16,6 +16,7 @@ import com.sandagerdi.translationprojectmanager.Util.Utils;
 import com.sandagerdi.translationprojectmanager.Verifiers.CellEditor;
 import com.sandagerdi.translationprojectmanager.Verifiers.CustomComboBoxEditor;
 import com.sandagerdi.translationprojectmanager.Verifiers.DoubleVerifier;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -55,7 +56,9 @@ public class ViewJobsTable extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextArea textAreaAllJobs;
     private javax.swing.JTextArea textAreaSpecificJob;
-
+    private javax.swing.JButton buttonDeleteJob;
+    private javax.swing.JButton buttonMarkAsDone;
+    
     public ViewJobsTable() {
 
         initComponents();
@@ -124,6 +127,18 @@ public class ViewJobsTable extends javax.swing.JPanel {
         jScrollPane4 = new javax.swing.JScrollPane();
         textAreaSpecificJob = new javax.swing.JTextArea();
 
+        buttonMarkAsDone = new javax.swing.JButton();
+        buttonDeleteJob = new javax.swing.JButton();
+        
+        buttonDeleteJob.setText("Delete Job");
+        buttonMarkAsDone.setText("Mark as Done");
+        
+        buttonDeleteJob.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteRowActionPerformed(evt);
+            }
+        });
+        
         jButton2.setText("jButton2");
         jLabel1.setText("This Job");
         textAreaAllJobs.setColumns(20);
@@ -136,71 +151,76 @@ public class ViewJobsTable extends javax.swing.JPanel {
         textAreaSpecificJob.setEditable(false);
         jScrollPane4.setViewportView(textAreaSpecificJob);
 
-//        clientTable.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mousePressed(MouseEvent e) {
-//                if (e.getClickCount() > 2) {
-//                    JTable target = (JTable) e.getSource();
-//                    int row = target.getSelectedRow();
-//                    int column = target.getSelectedColumn();
-//                    if (column == 1) {
-//                        int convertRowToModel = clientTable.convertRowIndexToModel(row);
-//                        TableColumn comboCol1 = clientTable.getColumnModel().getColumn(1);
-//                        comboCol1.setCellEditor(null);
-//                        Clients client = m_tableModel.getValueAtRow(convertRowToModel).getClient();
-//                        comboCol1.setCellEditor(new CustomComboBoxEditor(client));
-//                    }
-//
-//                }
-//            }
-//        });
+        clientTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.getClickCount() > 2) {
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow();
+                    int column = target.getSelectedColumn();
+                    if (column == 1) {
+                        int convertRowToModel = clientTable.convertRowIndexToModel(row);
+                        TableColumn comboCol1 = clientTable.getColumnModel().getColumn(1);
+                        comboCol1.setCellEditor(null);
+                        Clients client = m_tableModel.getValueAtRow(convertRowToModel).getClient();
+                        comboCol1.setCellEditor(new CustomComboBoxEditor(client));
+                    }
+
+                }
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
 
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-                .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE)
+            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))))
-                        .addContainerGap())
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(buttonMarkAsDone)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(buttonDeleteJob)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(jLabel1))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(jScrollPane3)
-                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jButton1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton2)))
-                        .addContainerGap())
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane3)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(buttonDeleteJob)
+                            .addComponent(buttonMarkAsDone))))
+                .addContainerGap())
         );
 
         setColumnWidths();
@@ -328,9 +348,9 @@ public class ViewJobsTable extends javax.swing.JPanel {
 
     private String getJobPayThisMonth() {
         //Date now = new Date();
-        DateTime from = beginningOfMonth(new DateTime());
+        DateTime from = Utils.beginningOfMonth(new DateTime());
         //DateTime from = new DateTime(2015, 1, 1, 1, 0);
-        DateTime to = endOfMonth(from);
+        DateTime to = Utils.endOfMonth(from);
         db.Connect();
 
         double result = 0.0;
@@ -365,31 +385,16 @@ public class ViewJobsTable extends javax.swing.JPanel {
         return Utils.formatDoubleToLocale(result);
     }
 
-    /* Month */
-    private static DateTime endOfMonth(DateTime dateTime) {
-        return endOfDay(dateTime).withDayOfMonth(dateTime.dayOfMonth().getMaximumValue());
-    }
+    
 
-    private static DateTime beginningOfMonth(DateTime dateTime) {
-        return beginningOfday(dateTime).withDayOfMonth(1);
-    }
+    
+    private void deleteRowActionPerformed(ActionEvent evt) {
+        //Check if there is anything to delete
+        int rowToDelete = clientTable.getSelectedRow();
+        if (rowToDelete>=0){
+        System.out.println("Selected Row:" + rowToDelete);
+        m_tableModel.removeRow(rowToDelete);
+        }
 
-    /* Day */
-    private static DateTime endOfDay(DateTime dateTime) {
-        return endOfHour(dateTime).withHourOfDay(23);
     }
-
-    private static DateTime beginningOfday(DateTime dateTime) {
-        return beginningOfHour(dateTime).withHourOfDay(0);
-    }
-
-    /* Hour */
-    private static DateTime beginningOfHour(DateTime dateTime) {
-        return dateTime.withMillisOfSecond(0).withSecondOfMinute(0).withMinuteOfHour(0);
-    }
-
-    private static DateTime endOfHour(DateTime dateTime) {
-        return dateTime.withMillisOfSecond(999).withSecondOfMinute(59).withMinuteOfHour(59);
-    }
-
 }
