@@ -7,6 +7,7 @@ import com.sandagerdi.translationprojectmanager.TableModels.ClientTableModel;
 import com.j256.ormlite.dao.CloseableIterator;
 import com.sandagerdi.translationprojectmanager.Repository.Clients;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -98,6 +99,9 @@ public class ViewClientsTable extends javax.swing.JPanel {
                                 .addComponent(deleteRow))
                         .addContainerGap(34, Short.MAX_VALUE))
         );
+        
+        clientTable.setShowGrid(true);
+        clientTable.setGridColor(Color.BLACK);
     }
 
     private List<Object> getClients() {

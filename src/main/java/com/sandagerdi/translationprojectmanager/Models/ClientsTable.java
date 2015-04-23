@@ -78,6 +78,7 @@ public class ClientsTable extends javax.swing.JPanel {
             }
         });
 
+        clientTable.setShowGrid(true);
         jScrollPane1.setViewportView(clientTable);
 
         deleteRow.setText("jButton2");

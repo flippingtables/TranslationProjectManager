@@ -17,6 +17,7 @@ import com.sandagerdi.translationprojectmanager.Util.Utils;
 import com.sandagerdi.translationprojectmanager.Verifiers.CellEditor;
 import com.sandagerdi.translationprojectmanager.Verifiers.CustomComboBoxEditor;
 import com.sandagerdi.translationprojectmanager.Verifiers.DoubleVerifier;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -109,6 +110,9 @@ public class ViewJobsTable extends javax.swing.JPanel {
                 updateTable();
             }
         });
+        
+        clientTable.setShowGrid(true);
+        clientTable.setGridColor(Color.BLACK);
 
         ListSelectionModel selectionModel = clientTable.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

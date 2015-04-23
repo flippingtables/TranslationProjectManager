@@ -7,6 +7,7 @@ import com.sandagerdi.translationprojectmanager.TableModels.JobTypesTableModel;
 import com.j256.ormlite.dao.CloseableIterator;
 import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
+import java.awt.Color;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -84,7 +85,8 @@ public class ViewJobTypesTable extends javax.swing.JPanel {
         );
         clientTable.setEditingColumn(2);
         clientTable.setEnabled(true);
-
+        clientTable.setShowGrid(true);
+        clientTable.setGridColor(Color.BLACK);
     }
 
     private List<Object> getJobs() {
