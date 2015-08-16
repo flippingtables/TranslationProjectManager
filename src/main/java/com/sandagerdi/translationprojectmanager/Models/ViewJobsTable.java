@@ -331,9 +331,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
     }
 
     private String getJobPayThisMonth() {
-        //Date now = new Date();
         DateTime from = Utils.beginningOfMonth(new DateTime());
-        //DateTime from = new DateTime(2015, 1, 1, 1, 0);
         DateTime to = Utils.endOfMonth(from);
         db.Connect();
 

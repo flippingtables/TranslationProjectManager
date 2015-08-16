@@ -3,6 +3,7 @@
  */
 package com.sandagerdi.translationprojectmanager.Util;
 
+import com.sandagerdi.translationprojectmanager.Models.ViewClientsTable;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import com.sandagerdi.translationprojectmanager.Repository.Jobs;
 import com.sandagerdi.translationprojectmanager.TableModels.JobsTableModel;
@@ -13,6 +14,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -87,6 +90,18 @@ public class Utils {
          Format date = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
          return date;
     }   
+    
+    public static Date parseDateFromString(String dateString){
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yy HH:mm");
+        DateTime date = null;
+        try {
+            date = fmt.parseDateTime(dateString);    
+        } catch (Exception e) {
+            Logger.getLogger(ViewClientsTable.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return date.toDate();
+    }
+    
     
     public static int[] getSelectedRows(ListSelectionModel selection) {
         int iMin = selection.getMinSelectionIndex();

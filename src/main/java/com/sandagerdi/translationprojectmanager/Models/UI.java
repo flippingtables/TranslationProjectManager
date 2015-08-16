@@ -42,7 +42,7 @@ public class UI extends javax.swing.JFrame {
         addNewJobPanel1 = new com.sandagerdi.translationprojectmanager.Models.AddNewJobPanel();
         viewJobsTable = new com.sandagerdi.translationprojectmanager.Models.ViewJobsTable();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        jMenuBar = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
@@ -57,12 +57,12 @@ public class UI extends javax.swing.JFrame {
         jTabbedPane1.addTab("See Clients", viewClientsTable1);
         jTabbedPane1.addTab("Add Clients", clientPanel2);
                 
-        jMenu1.setText("File");
+        jMenuBar.setText("File");
 
-        jMenuItem1.setText("jMenuItem1");
-        jMenu1.add(jMenuItem1);
+        jMenuItem1.setText("Exit");
+        jMenuBar.add(jMenuItem1);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(jMenuBar);
 
         jMenu2.setText("Edit");
         jMenuBar1.add(jMenu2);
@@ -122,7 +122,7 @@ public class UI extends javax.swing.JFrame {
     // Variables declaration - do not modify                     
     private com.sandagerdi.translationprojectmanager.Models.AddNewJobPanel addNewJobPanel1;
     private com.sandagerdi.translationprojectmanager.Models.ClientPanel clientPanel2;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenuBar;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;

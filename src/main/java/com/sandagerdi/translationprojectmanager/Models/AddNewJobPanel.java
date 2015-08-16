@@ -39,8 +39,6 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         initComponents();
 
         DateTime now = new DateTime();
-
-        tfTime.setText(now.getHourOfDay() + ":" + now.getMinuteOfHour());
         initializeComboBoxes();
     }
 
@@ -85,15 +83,13 @@ public class AddNewJobPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         taDescription = new javax.swing.JTextArea();
         jLabel17 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        tfTime = new javax.swing.JTextField();
         tfHours = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         isRushCheckBox = new javax.swing.JCheckBox();
         jLabel18 = new javax.swing.JLabel();
         jLabelErrorMessage = new javax.swing.JLabel();
         jButtonPasteJob = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        jtf_DeadLine = new javax.swing.JTextField();
 
         jLabel3.setText("Service:");
 
@@ -180,10 +176,6 @@ public class AddNewJobPanel extends javax.swing.JPanel {
 
         jLabel17.setText("Deadline:");
 
-        jLabel14.setText("Time:");
-
-        tfTime.setToolTipText("HH:mm");
-
         tfHours.setText("0.0");
 
         jLabel15.setText("Match:");
@@ -227,17 +219,11 @@ public class AddNewJobPanel extends javax.swing.JPanel {
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel1))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(cbSourceLanguage, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cbTargetLanguage, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel14)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cbTargetLanguage, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cbSourceLanguage, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jtf_DeadLine, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -272,6 +258,9 @@ public class AddNewJobPanel extends javax.swing.JPanel {
                             .addComponent(jLabelErrorMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel10, jLabel12, jLabel13, jLabel15, jLabel18, jLabel4, jLabel6, jLabel7, jLabel8, jLabel9});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -353,13 +342,10 @@ public class AddNewJobPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel17)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel14)
-                                .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(jtf_DeadLine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel17))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -472,7 +458,6 @@ public class AddNewJobPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -488,11 +473,10 @@ public class AddNewJobPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabelErrorMessage;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jtf_DeadLine;
     private javax.swing.JTextArea taDescription;
     private javax.swing.JTextField tfHours;
     private javax.swing.JTextField tfICE;
-    private javax.swing.JTextField tfTime;
     private javax.swing.JTextField tfWords_Fuzzy50;
     private javax.swing.JTextField tfWords_Fuzzy75;
     private javax.swing.JTextField tfWords_Fuzzy85;
@@ -503,14 +487,10 @@ public class AddNewJobPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private Date getDeadlineDate() {
-
-        Date hoursMinutes = Utils.parseHoursMinutes(tfTime.getText());
-        
-        Date d = DateTime.now().toDate();//jcDatePicker.getDate();
-        d.setHours(hoursMinutes.getHours());
-        d.setMinutes(hoursMinutes.getMinutes());
-        System.out.println("Date:" + d.toString());
-        return d;
+        String dateString = jtf_DeadLine.getText();
+        Date date = Utils.parseDateFromString(dateString);
+        System.out.println("Date:" + date.toString());
+        return date;
     }
 
     private void initializeComboBoxes() {
