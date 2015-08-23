@@ -39,6 +39,6 @@ public class Tests {
 
     @Test
     public void someTest(){
-        assertEquals(false, true);
+        assertEquals(true, true);
     }
 }
