@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -27,7 +26,7 @@ import javax.swing.event.TableModelListener;
  * @author Jóannes
  */
 public class ViewClientsTable extends javax.swing.JPanel {
-
+    private static final Logger log = Logger.getLogger(ViewClientsTable.class.getName());
     public JTable clientTable;
     public ClientTableModel m_tableModel;
 
@@ -52,12 +51,14 @@ public class ViewClientsTable extends javax.swing.JPanel {
         deleteRow.setText("Delete Selected Row!");
 
         jButton1.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
         deleteRow.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteRowActionPerformed(evt);
             }
@@ -68,6 +69,7 @@ public class ViewClientsTable extends javax.swing.JPanel {
         clientTable = new JTable(m_tableModel);
         clientTable.getModel().addTableModelListener(new TableModelListener() {
 
+            @Override
             public void tableChanged(TableModelEvent e) {
                 System.out.println("Table Data Changed, updating tables");
                 updateTable();
@@ -106,20 +108,20 @@ public class ViewClientsTable extends javax.swing.JPanel {
 
     private List<Object> getClients() {
         db = new DatabaseConnection();
-        CloseableIterator<Clients> c = null;
-        c = db.getClientsDao().closeableIterator();
-        List<Object> clients = Collections.synchronizedList(new ArrayList<Object>());
+        CloseableIterator<Clients> c = db.getClientsDao().closeableIterator();
+        
+        List<Object> clients = Collections.synchronizedList(new ArrayList<>());
         while (c.hasNext()) {
             try {
                 clients.add(c.current());
             } catch (SQLException ex) {
-                Logger.getLogger(ClientsTable.class.getName()).log(Level.SEVERE, null, ex);
+                log.log(Level.SEVERE, null, ex);
             }
         }
         try {
             c.close();
         } catch (SQLException ex) {
-            Logger.getLogger(ViewClientsTable.class.getName()).log(Level.SEVERE, null, ex);
+            log.log(Level.SEVERE, null, ex);
         }
         return clients;
     }

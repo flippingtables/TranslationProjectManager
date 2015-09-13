@@ -4,6 +4,7 @@
 package com.sandagerdi.translationprojectmanager.Util;
 
 import com.sandagerdi.translationprojectmanager.Models.ViewClientsTable;
+import com.sandagerdi.translationprojectmanager.Repository.DatabaseConnection;
 import com.sandagerdi.translationprojectmanager.Repository.JobTypes;
 import com.sandagerdi.translationprojectmanager.Repository.Jobs;
 import com.sandagerdi.translationprojectmanager.TableModels.JobsTableModel;
@@ -27,6 +28,10 @@ import org.joda.time.format.DateTimeFormatter;
  */
 public class Utils {
 
+    public static void log(Class caller, String message){
+        Logger.getLogger(caller.getName()).log(Level.SEVERE, null, message);
+    }
+    
     //Used for checking if a string is parseable to a double
     public static boolean parseableDouble(String input) {
         boolean result = false;

@@ -15,19 +15,20 @@ import org.joda.time.DateTime;
  * @author Jóannes
  */
 public class DatabaseConnection {
-
+    private static final Logger log = Logger.getLogger(DatabaseConnection.class.getName());
     private ConnectionSource connectionSource;
     private final static String DATABASE_URL = "jdbc:sqlite:translationJobs.db";
 
     private Dao<Clients, Integer> clientDao;
     private Dao<JobTypes, Integer> jobTypesDao;
     private Dao<Jobs, Integer> jobsDao;
+    
 
     public DatabaseConnection() {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            log.log(Level.SEVERE, null, ex);
         }
         try {
             // create our data-source for the database
@@ -35,14 +36,12 @@ public class DatabaseConnection {
                 connectionSource = new JdbcConnectionSource(DATABASE_URL);
             }
             // setup our database and DAOs
-//            setupDatabase(connectionSource);
-
-            System.out.println("\n\nIt seems to have worked\n\n");
+            log.log(Level.SEVERE, "\n\nIt seems to have worked\n\n");
         } catch (SQLException ex) {
 
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            log.log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            log.log(Level.SEVERE, null, ex);
         } finally {
             // destroy the data source which should close underlying connections
             Disconnect();
@@ -108,12 +107,7 @@ public class DatabaseConnection {
             if (connectionSource == null) {
                 connectionSource = new JdbcConnectionSource(DATABASE_URL);
             }
-
-            try {
-                jobsDao = DaoManager.createDao(connectionSource, Jobs.class);
-            } catch (SQLException ex) {
-                Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            jobsDao = DaoManager.createDao(connectionSource, Jobs.class);
         } catch (SQLException e) {
             System.out.println("GetJobsDao");
         } finally {
@@ -188,13 +182,14 @@ public class DatabaseConnection {
             jobTypesDao.create(i);
             jobTypesDao.create(j);
 
-            Jobs job = new Jobs(zeit, a, DateTime.now().toDate(), DateTime.now().toDate(), "001-13-12-434-Apple Channel Sales and Development-153578 - SST-CSnD-1745-iPadinK20iPadinexistingITInfrastructures", 0.0,1147.0,0.0,14.0,0.0,0.0,51.0,10.0,20.0,false);
+            Jobs job = new Jobs(zeit, a, DateTime.now().toDate(), DateTime.now().toDate(), "001-13-12-434-Apple Channel Sales and Development-153578 - SST-CSnD-1745-iPadinK20iPadinexistingITInfrastructures", 0.0, 1147.0, 0.0, 14.0, 0.0, 0.0, 51.0, 10.0, 20.0, false);
             jobsDao.create(job);
-            Jobs job1 = new Jobs(local, a, DateTime.now().toDate(), DateTime.now().toDate(), "Apple Channel Sales and Development-153578 - SST-CSnD-1745-iPadinK20iPadinexistingITInfrastructures", 0.0,1147.0,0.0,14.0,7.0,32.0,51.0,10.0,20.0,true);
+            Jobs job1 = new Jobs(local, a, DateTime.now().toDate(), DateTime.now().toDate(), "Apple Channel Sales and Development-153578 - SST-CSnD-1745-iPadinK20iPadinexistingITInfrastructures", 0.0, 1147.0, 0.0, 14.0, 7.0, 32.0, 51.0, 10.0, 20.0, true);
             jobsDao.create(job1);
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
 }

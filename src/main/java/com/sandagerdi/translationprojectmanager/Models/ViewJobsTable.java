@@ -47,7 +47,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
     private JobsTableModel m_tableModel;
     private javax.swing.JScrollPane jScrollPane1;
     private JButton buttonRefresh;
-    private DatabaseConnection db = new DatabaseConnection();
+    private DatabaseConnection db;
     
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -61,6 +61,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
     private javax.swing.JButton buttonMarkAsDone;
     
     public ViewJobsTable() {
+        this.db = new DatabaseConnection();
 
         initComponents();
     }
@@ -83,6 +84,7 @@ public class ViewJobsTable extends javax.swing.JPanel {
         m_tableModel = new JobsTableModel(jobs);
         clientTable = new JTable(m_tableModel) {
             //Implement table cell tool tips.           
+            @Override
             public String getToolTipText(MouseEvent e) {
                 String tip = null;
                 java.awt.Point p = e.getPoint();
